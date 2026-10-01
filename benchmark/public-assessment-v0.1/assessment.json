@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "wald-public-assessment-fixture-v1",
+  "id": "wald-public-assessment",
+  "version": "0.1.0",
+  "kind": "historicalAlertReleaseOpportunity",
+  "seed": "wald-public-assessment-v0.1:104729",
+  "pack": "embedded-fraud-pack",
+  "alerts": 1200,
+  "calibrationAlerts": 600,
+  "evaluationAlerts": 600,
+  "splitAt": "2024-07-01T00:30:00Z",
+  "asOf": "2024-12-19T00:00:00Z",
+  "labelObservationLagDays": 120,
+  "outcomes": {
+    "falsePositive": 1080,
+    "fraud": 120
+  },
+  "expected": {
+    "packSha256": "sha256:dacf7916ed5fce96801e9c73cf8fcad02ae51337e2d84ed5047e0030138a09c7",
+    "resultSha256": "sha256:98f1d4db7d13294eb680bee03d4844bba76539c22ec1d723fe6181a30cdfb906",
+    "evaluationAlerts": 600,
+    "evaluationLabeled": 600,
+    "wouldReleaseLabeled": 526,
+    "wouldReleaseAdverse": 6,
+    "analystMinutesSaved": 6240
+  },
+  "files": {
+    "alerts.jsonl": "39fe31b52bd41c626af6f69258c892c74e54eea278f473492816d266caf0cdc4",
+    "events.jsonl": "6de22b762db60b142c4aed80b32efa91a10f2ecaba9451f4a486e84734d5ebd4",
+    "labels.jsonl": "78706d9ae4ffd9012f79de6c73acc48f0476142ee6d4add104c5c8d5f172f904",
+    "references.jsonl": "9d0c7dd2474de97c2e422b8bf8a1eaf952300e6c0408e6fa86b8b92765fd44d3",
+    "state.jsonl": "54d5068dc631700dcec018255d129d98a514a3e8d8f92e6b81d9ec6333682b37"
+  }
+}

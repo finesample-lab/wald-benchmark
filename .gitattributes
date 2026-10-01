@@ -1,0 +1,8 @@
+# Keeps the public benchmark byte-stable across operating systems.
+# The release workflow archives these tracked sources, while the Wald release
+# compares the versioned benchmark directory with its bundled copy.
+* text=auto eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
