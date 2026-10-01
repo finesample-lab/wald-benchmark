@@ -64,11 +64,41 @@ jobs:
             *) echo "::error::Image did not resolve to the expected digest reference"; exit 1 ;;
           esac
           printf '%s\n' "$image_reference" > image-reference.txt
+      - uses: sigstore/cosign-installer@v3
+      - name: Verify the image identity and bundled benchmark
+        run: |
+          image_reference=$(cat image-reference.txt)
+          cosign verify \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+            --certificate-identity "https://github.com/finesample-lab/wald/.github/workflows/release.yml@refs/tags/v$VERSION" \
+            "$image_reference"
+          expected_revision=$(git rev-parse HEAD)
+          image_revision=$(docker image inspect \
+            --format '{{index .Config.Labels "io.finesample.wald.benchmark.revision"}}' \
+            "$image_reference")
+          test "$image_revision" = "$expected_revision"
+          candidate=$(docker create "$image_reference")
+          image_benchmark=$(mktemp -d)
+          cleanup() {
+            docker rm -f "$candidate" >/dev/null 2>&1 || true
+            rm -rf -- "$image_benchmark"
+          }
+          trap cleanup EXIT
+          docker cp \
+            "$candidate:/usr/share/doc/wald/public-assessment-v0.1/." \
+            "$image_benchmark"
+          diff -ru benchmark/public-assessment-v0.1 "$image_benchmark"
       - name: Run the tagged public benchmark against the exact image
         run: |
           benchmark/public-assessment-v0.1/run.sh \
             --image "$(cat image-reference.txt)" \
             --out "$RUNNER_TEMP/wald-assessment-v$VERSION"
+          benchmark/public-assessment-v0.1/run.sh \
+            --image "$(cat image-reference.txt)" \
+            --out "$RUNNER_TEMP/wald-assessment-v$VERSION-repeat"
+          diff -ru \
+            "$RUNNER_TEMP/wald-assessment-v$VERSION" \
+            "$RUNNER_TEMP/wald-assessment-v$VERSION-repeat"
       - name: Build deterministic release archives
         run: |
           artifact_dir="$RUNNER_TEMP/artifacts"
@@ -85,7 +115,12 @@ jobs:
           tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='@0' \
             -C "$RUNNER_TEMP" -cf - "$result_name" | gzip -n > "$artifact_dir/$result_name.tar.gz"
           cp image-reference.txt "$artifact_dir/image-reference.txt"
-          (cd "$artifact_dir" && sha256sum *.tar.gz image-reference.txt > SHA256SUMS)
+          cp "$RUNNER_TEMP/wald-assessment-v$VERSION/backtest.json" "$artifact_dir/backtest.json"
+          cp "$RUNNER_TEMP/wald-assessment-v$VERSION/backtest.md" "$artifact_dir/backtest.md"
+          cp "$RUNNER_TEMP/wald-assessment-v$VERSION/assessment-manifest.json" \
+            "$artifact_dir/assessment-manifest.json"
+          (cd "$artifact_dir" && sha256sum \
+            *.json *.md *.tar.gz image-reference.txt > SHA256SUMS)
       - name: Publish the GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
