@@ -1,7 +1,7 @@
 {
   "schemaVersion": "wald-public-assessment-fixture-v1",
   "id": "wald-public-assessment",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "kind": "historicalAlertReleaseOpportunity",
   "seed": "wald-public-assessment-v0.1:104729",
   "pack": "embedded-fraud-pack",

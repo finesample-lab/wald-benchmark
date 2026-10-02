@@ -1,22 +1,66 @@
-# Wald Benchmark
+<!--
+This README is the public front door for Wald's reproducible benchmark.
+It leads readers from the declared result to an offline run, while the fixture
+README and release workflow hold the detailed design and publication contract.
+-->
 
-This repository owns the public, reproducible benchmark for Wald releases. It contains the synthetic fixture design, generator, independent verifier, and image runner; it never contains Wald's source code. Each version is run against the corresponding public image, and its durable release assets bind the exact image digest to the observed result.
+# See Wald run on a history you can inspect
 
-## Run 0.1
+Most alerts end in release. Wald measures which customers could have stopped
+waiting, what happened to those alerts later, and which cases still needed a
+person.
 
-The benchmark needs Python 3 and a Docker-compatible container runtime. On macOS, the Docker CLI supplied by OrbStack works without any benchmark-specific setup.
+This is the public benchmark for Wald 0.1: one generated alert history, one
+published evaluator, one expected answer, and a separate check of every output.
+
+**Free to run. No account. No live changes. No network access during the
+assessment.**
+
+[Run it](#run-it) · [Read the fixture design](benchmark/public-assessment-v0.1/README.md) · [Download a release](https://github.com/finesample-lab/wald-benchmark/releases)
+
+## The expected result
+
+The fixed evaluation period contains 600 synthetic fraud alerts with mature,
+independently observed outcomes.
+
+| On the public fixture | Wald 0.1 |
+| --- | ---: |
+| Alerts evaluated | 600 |
+| Customers Wald would mark for release | 526 |
+| Later adverse outcomes among them | 6 |
+| Analyst time that could have been removed | 104 hours |
+| Alerts kept with a person | 74 |
+
+Every number is declared in
+[`assessment.json`](benchmark/public-assessment-v0.1/assessment.json) and checked
+by a verifier separate from the evaluator.
+
+**What this does not tell us.** The history is synthetic and deliberately
+contains familiar, adverse, and unfamiliar cases. It shows the answer Wald
+produces and whether the published image reproduces it. It does not predict
+what Wald will find in another institution's queue, rank Wald against another
+product, or certify a live deployment. Your own history supplies the number
+that matters.
+
+## Run it
+
+You need Python 3 and a Docker-compatible OCI container runtime.
 
 ```sh
 git clone https://github.com/finesample-lab/wald-benchmark.git
 cd wald-benchmark
 benchmark/public-assessment-v0.1/run.sh \
-  --image ghcr.io/finesample-lab/wald:v0.1.0 \
+  --image ghcr.io/finesample-lab/wald:v0.1.1 \
   --out /tmp/wald-assessment-0.1
 ```
 
-The runner generates the fixture from its checked-in definition, verifies every generated input hash, runs the image without network access, and independently checks the reports and expected result. It refuses to replace an existing output directory.
+The runner generates the fixture, checks every input hash, runs Wald with
+networking disabled, and verifies the reports against the expected result. It
+refuses to replace an existing output directory.
 
-For the exact release image, download `image-reference.txt` from the matching [GitHub release](https://github.com/finesample-lab/wald-benchmark/releases) and pass its contents to `--image`:
+For the immutable release image, download `image-reference.txt` from the
+matching [release](https://github.com/finesample-lab/wald-benchmark/releases)
+and run:
 
 ```sh
 benchmark/public-assessment-v0.1/run.sh \
@@ -24,20 +68,80 @@ benchmark/public-assessment-v0.1/run.sh \
   --out /tmp/wald-assessment-0.1-by-digest
 ```
 
-## What the result means
+## What you get
 
-The 0.1 benchmark is a fixed, synthetic fraud alert history. It demonstrates the evaluator's report shape, point-in-time behavior, refusal boundaries, and reproducibility. Its expected result is declared in [`assessment.json`](benchmark/public-assessment-v0.1/assessment.json), then checked independently by [`verify.py`](benchmark/public-assessment-v0.1/verify.py).
+- `backtest.md` — the result in the language of customers, outcomes, hours,
+  and hold time;
+- `backtest.json` — the complete measured result, including label coverage,
+  uncertainty, calibration, bands, and limits; and
+- `assessment-manifest.json` — the exact identities of the inputs, pack,
+  method, evaluator, and output files.
 
-It is not evidence of performance on an institution's alerts, a competitive leaderboard, a safety certification, or a claim about underwriting or another decision pack. A buyer's own historical export is the evidence for that buyer's opportunity.
+Two runs against the same image and inputs produce the same assessment result.
 
-## Releases and trust
+## Try Wald on your history
 
-The matching Wald release workflow compares its bundled benchmark with this repository's version tag before publishing. This repository then pulls the public image anonymously by tag, resolves it to an immutable digest, runs the benchmark against that digest, and publishes checksummed source and result archives.
+The public fixture shows the shape of the answer. To measure your own queue,
+prepare one directory with:
 
-Wald's image also carries the same files at `/usr/share/doc/wald/public-assessment-v0.1/`. `SHA256SUMS` in each benchmark release covers every durable asset.
+- `events.jsonl`, the history available at each alert time;
+- `alerts.jsonl`, the alerts in chronological order; and
+- `labels.jsonl`, outcomes from an independent source.
 
-## Licensing boundary
+Then run the same image locally:
 
-The benchmark source and synthetic fixture definition in this repository are licensed under the [MIT License](LICENSE). That license does not apply to Wald, its image, its binary, its decision packs, or fineSample trademarks. The separately distributed evaluator is governed by [Wald's evaluation terms](EVALUATION-TERMS.md).
+```sh
+mkdir -p wald-results
+docker run --rm \
+  --network none \
+  --user "$(id -u):$(id -g)" \
+  -v "$PWD/export:/input:ro" \
+  -v "$PWD/wald-results:/results" \
+  ghcr.io/finesample-lab/wald:v0.1.1 \
+  backtest /input --out /results/assessment
+```
 
-`LICENSE` is the standard legal text for the benchmark materials, so it intentionally contains no maintenance header. Generated JSONL inputs and report files are intentionally untracked; the versioned generator and release workflow are their maintainable sources.
+The evaluator changes nothing live and needs no service or account. Optional
+inputs add point-in-time state, references, recorded model answers, reviewed
+thresholds, or another complete decision pack. Read the
+[fixture guide](benchmark/public-assessment-v0.1/README.md) and
+[evaluation terms](EVALUATION-TERMS.md) before using a result commercially.
+
+## How a release is checked
+
+Each Wald release is bound to the matching version of this repository. The
+release jobs:
+
+1. compare the benchmark bundled in the image with this tagged source;
+2. pull the image without credentials and resolve its immutable digest;
+3. verify the image signature and embedded benchmark revision;
+4. run the assessment twice with networking disabled; and
+5. publish the source, reports, image reference, and `SHA256SUMS` together.
+
+The image carries the same benchmark at
+`/usr/share/doc/wald/public-assessment-v0.1/`. The complete fixture composition,
+time split, outcome lag, and interpretation guide are in the
+[fixture README](benchmark/public-assessment-v0.1/README.md).
+
+## Repository map
+
+This repository owns the public benchmark, not Wald's product source. The
+boundary is intentionally small:
+
+- `assessment.json` declares the fixed fixture and expected result;
+- `generate.py` produces and hash-checks the synthetic inputs;
+- `run.sh` runs a selected Wald image without network access;
+- `verify.py` checks the reports without sharing evaluator code; and
+- `.github/workflows/release.yml` binds each public release to an exact image
+  digest and publishes durable evidence.
+
+## Licence
+
+The benchmark source and synthetic fixture definition are available under the
+[MIT License](LICENSE). That licence does not apply to Wald, its image, its
+binary, its decision packs, or fineSample trademarks. The evaluator is
+distributed under [Wald's evaluation terms](EVALUATION-TERMS.md).
+
+`LICENSE` is standard legal text and intentionally has no maintenance header.
+Generated JSONL inputs and reports are untracked; the versioned generator and
+release workflow are their sources of truth.

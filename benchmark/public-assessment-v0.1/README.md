@@ -16,7 +16,7 @@ The supported public path uses the released image:
 
 ```sh
 benchmark/public-assessment-v0.1/run.sh \
-  --image ghcr.io/finesample-lab/wald:v0.1.0 \
+  --image ghcr.io/finesample-lab/wald:v0.1.1 \
   --out /tmp/wald-assessment-0.1
 ```
 
