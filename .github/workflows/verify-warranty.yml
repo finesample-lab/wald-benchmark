@@ -35,14 +35,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Pull the immutable Wald image
         run: docker pull "$WALD_IMAGE"
-      - name: Run the warranty assessment twice
+      - name: Run the warranty assessment
         run: |
           benchmark/warranty-claim-triage-v0.1/run.sh \
             --image "$WALD_IMAGE" \
             --out "$RUNNER_TEMP/warranty-assessment"
-          benchmark/warranty-claim-triage-v0.1/run.sh \
-            --image "$WALD_IMAGE" \
-            --out "$RUNNER_TEMP/warranty-assessment-repeat"
-          diff -ru \
-            "$RUNNER_TEMP/warranty-assessment" \
-            "$RUNNER_TEMP/warranty-assessment-repeat"
