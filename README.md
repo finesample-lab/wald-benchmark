@@ -27,20 +27,30 @@ independently observed outcomes.
 | --- | ---: |
 | Alerts evaluated | 600 |
 | Customers Wald would mark for release | 526 |
-| Later adverse outcomes among them | 6 |
-| Analyst time that could have been removed | 104 hours |
+| Later adverse outcomes among them | 6 of 526: 1.1% (95% Wilson interval: 0.5–2.5%) |
+| Illustrative review time on later-legitimate release candidates | 104 hours (520 × an assumed 12 minutes) |
 | Alerts kept with a person | 74 |
 
 Every number is declared in
 [`assessment.json`](benchmark/public-assessment-v0.1/assessment.json) and checked
 by a verifier separate from the evaluator.
 
+The 104 hours are arithmetic under the stated review-time assumption, not an
+observed saving. The interval describes sampling uncertainty in this fixed
+fixture; it does not make the fixture representative of another queue.
+
 **What this does not tell us.** The history is synthetic and deliberately
-contains familiar, adverse, and unfamiliar cases. It shows the answer Wald
-produces and whether the published image reproduces it. It does not predict
-what Wald will find in another institution's queue, rank Wald against another
-product, or certify a live deployment. Your own history supplies the number
-that matters.
+contains familiar, adverse, and unfamiliar cases. This benchmark tests the
+historical evaluator, its release-opportunity scorecard, and the reproducible
+release conditions around it. It does not exercise Wald's live CRI loop or
+show that blind outcome sampling has earned authority in a deployment. It does
+not predict what Wald will find in another institution's queue, rank Wald
+against another product, or certify a live deployment.
+
+fineSample wrote the fixture, evaluator, and verifier. Keeping the verifier
+separate catches reproducibility and contract failures, but it is not
+independent validation. **Running the same evaluator on your own history and
+independently observed outcomes is the benchmark that matters.**
 
 ## Run it
 

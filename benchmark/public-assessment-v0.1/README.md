@@ -8,7 +8,15 @@ The assessment asks one deliberately narrow question:
 
 > On this fixed history, which alerts would Wald have sent back to the existing review process, which would it have identified as release opportunities, and what later outcomes were observed?
 
-It is useful for inspecting Wald's result shape, replaying the same inputs, and checking that a release image produces the declared assessment. It is not customer evidence, a safety certification, a live drift exercise, or competitive proof. A public fixture can be recognized and optimized for; it cannot establish what will happen on a new institution's alerts.
+It is useful for inspecting Wald's result shape, replaying the same inputs, and
+checking that a release image produces the declared assessment. It tests the
+historical evaluator and its release-opportunity scorecard, not the live CRI
+loop or whether blind outcome sampling has earned authority in a deployment.
+It is not customer evidence, independent validation, a safety certification,
+a live drift exercise, or competitive proof. fineSample wrote the fixture,
+evaluator, and separate verifier. That separation catches reproducibility and
+contract failures, but a public fixture can be recognized and optimized for;
+it cannot establish what will happen on a new institution's alerts.
 
 ## Run it
 
@@ -47,6 +55,15 @@ The periods are separated by more than the fixture's 120-day outcome-observation
 
 ## Reading the result
 
-Start with labeled evaluation coverage, observed adverse outcomes among would-release alerts, the uncertainty around that rate, analyst time, and hold time. Read the per-band table and the stated limitations with the headline number. Do not interpret the fixture as evidence that Wald can release the same share for another institution.
+Start with labeled evaluation coverage, observed adverse outcomes among
+would-release alerts, the uncertainty around that rate, review-time arithmetic,
+and hold time. In this fixture, 6 of 526 labeled release candidates had a later
+adverse outcome: 1.1%, with a two-sided 95% Wilson interval of 0.5% to 2.5%.
+The reported 104 analyst hours are 520 later-legitimate release candidates
+multiplied by the declared assumption of 12 minutes per review; they are not
+observed savings. Read the per-band table and the stated limitations with the
+headline number. Do not interpret the fixture as evidence that Wald can release
+the same share for another institution. The useful next test is the same
+evaluator on the institution's own history and independently observed outcomes.
 
 The evaluator's content-hashed assessment manifest—not this fixture definition—binds the input hashes, effective pack identity, runtime version, result hashes, method, and limitations. The manifest is not internally signed. For an official release, the release workflow attaches it as a Sigstore attestation to the signed image; that external release identity is what authenticates the published result.
