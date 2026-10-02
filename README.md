@@ -16,7 +16,10 @@ published evaluator, one expected answer, and a separate check of every output.
 **Free to run. No account. No live changes. No network access during the
 assessment.**
 
-[Run it](#run-it) · [Read the fixture design](benchmark/public-assessment-v0.1/README.md) · [Download a release](https://github.com/finesample-lab/wald-benchmark/releases)
+[Try Wald on your history](#try-wald-on-your-history) ·
+[Run the public fixture](#run-it) ·
+[Read the fixture design](benchmark/public-assessment-v0.1/README.md) ·
+[Download a release](https://github.com/finesample-lab/wald-benchmark/releases)
 
 ## The expected result
 
@@ -31,13 +34,15 @@ independently observed outcomes.
 | Illustrative review time on later-legitimate release candidates | 104 hours (520 × an assumed 12 minutes) |
 | Alerts kept with a person | 74 |
 
-Every number is declared in
-[`assessment.json`](benchmark/public-assessment-v0.1/assessment.json) and checked
-by a verifier separate from the evaluator.
+The headline counts and review-time total are declared in
+[`assessment.json`](benchmark/public-assessment-v0.1/assessment.json). The rate
+and interval are derived from those counts, and a verifier separate from the
+evaluator checks the released report.
 
 The 104 hours are arithmetic under the stated review-time assumption, not an
-observed saving. The interval describes sampling uncertainty in this fixed
-fixture; it does not make the fixture representative of another queue.
+observed saving. The Wilson interval is a binomial-model calculation over this
+fixed, deliberately composed fixture; it does not make the fixture
+representative of another queue.
 
 **What this does not tell us.** The history is synthetic and deliberately
 contains familiar, adverse, and unfamiliar cases. This benchmark tests the
@@ -80,10 +85,10 @@ benchmark/public-assessment-v0.1/run.sh \
 
 ## What you get
 
-- `backtest.md` — the result in the language of customers, outcomes, hours,
-  and hold time;
-- `backtest.json` — the complete measured result, including label coverage,
-  uncertainty, calibration, bands, and limits; and
+- `backtest.md` — the result in the language of customers, outcomes,
+  assumption-derived review time, and hold time;
+- `backtest.json` — the complete result, including label coverage,
+  uncertainty calculations, calibration, bands, and limits; and
 - `assessment-manifest.json` — the exact identities of the inputs, pack,
   method, evaluator, and output files.
 

@@ -59,11 +59,14 @@ Start with labeled evaluation coverage, observed adverse outcomes among
 would-release alerts, the uncertainty around that rate, review-time arithmetic,
 and hold time. In this fixture, 6 of 526 labeled release candidates had a later
 adverse outcome: 1.1%, with a two-sided 95% Wilson interval of 0.5% to 2.5%.
-The reported 104 analyst hours are 520 later-legitimate release candidates
-multiplied by the declared assumption of 12 minutes per review; they are not
-observed savings. Read the per-band table and the stated limitations with the
-headline number. Do not interpret the fixture as evidence that Wald can release
-the same share for another institution. The useful next test is the same
-evaluator on the institution's own history and independently observed outcomes.
+That interval is a binomial-model calculation over a fixed, deliberately
+composed fixture; it does not make the fixture representative of another
+queue. The reported 104 analyst hours are 520 later-legitimate release
+candidates multiplied by the declared assumption of 12 minutes per review;
+they are not observed savings. Read the per-band table and the stated
+limitations with the headline number. Do not interpret the fixture as evidence
+that Wald can release the same share for another institution. The useful next
+test is the same evaluator on the institution's own history and independently
+observed outcomes.
 
 The evaluator's content-hashed assessment manifest—not this fixture definition—binds the input hashes, effective pack identity, runtime version, result hashes, method, and limitations. The manifest is not internally signed. For an official release, the release workflow attaches it as a Sigstore attestation to the signed image; that external release identity is what authenticates the published result.
