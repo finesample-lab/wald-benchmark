@@ -24,7 +24,7 @@
     "in": ["serial_recycling", "staged_failure", "bulk_claiming"]
   },
   "expedite": {
-    "answerTop": "priority",
-    "in": ["critical"]
+    "state": "serial.onAbuseList",
+    "eq": true
   }
 }

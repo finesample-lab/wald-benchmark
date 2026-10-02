@@ -32,7 +32,7 @@
     "no_abuse_found": 324
   },
   "expected": {
-    "packSha256": "sha256:72d548fcedf7cb312d120df57844b33c7bb551c802576bf64086b56b60abdc3d",
+    "packSha256": "sha256:96d6f2fed8c94b840f7e97a24e7da37f100e5cfc64e2c3a85d7ba1c7f71f5e0c",
     "resultSha256": "sha256:5f31e404d3ef83ad2e2041edb9ca1cadbb070b605c4470743c91f64a7fba7d83",
     "evaluationAlerts": 200,
     "evaluationLabeled": 200,
@@ -54,8 +54,8 @@
   },
   "packFiles": {
     "LICENSE": "7a05b311f354fee3ff1cdfc699b5f0ae60ff099368a0e36d3442ed98fe12f047",
-    "MANIFEST.sha256": "f65f10efea52a0b07114bddfcb4ea852d0d26b6f4bf229524a56a395909b9147",
-    "README.md": "fdde57583cee0585860ab430efe3cbfefe9e70840d007f76d1ba99f41007250c",
+    "MANIFEST.sha256": "3147587632dd9331f8aa5e3717976c6051eb0c1e750f0381e11e579cbaf27c99",
+    "README.md": "ba295d3e98bfac8e6358cff8c0b2fbae4ec29402dc8a19035f348b6aa086ac7c",
     "catalog.json": "259fb23a267abc1cea9f1a8c19dab6b69de6b292a107714290d2e35dfaaabb60",
     "domain.json": "3ca9d4df57c74419a8a82f02d0352e47bf749066d4986aadba125e07e25f002a",
     "facts.json": "4ca3fee46f6ffd4544d1cd2732954e85597056aee000df1864b966220447dcd0",
@@ -63,7 +63,7 @@
     "fixtures/first_claim.json": "06953f37290998a8c6e42a34be7e904735ef02c42734bcf389d33c91a0d3446f",
     "fixtures/serial_cross_customer.json": "2c4e2796c41d9caa758de5c6433c0d71a5286c42e7175e876a667547fd5580f5",
     "pack.json": "cab9097c60ffd538bbd9b172e7c04168fe3fc2ce722116e831a471627faab654",
-    "release-conditions.json": "e759b4745e1c6898aff2314a67e93ce571126cf29d7b40bd7a84b12d4f0c7bd7",
+    "release-conditions.json": "24faef27e8e31b9d91d8412a8ed7a86fa64e0a0af8624d31d19054c47dcaf360",
     "scripts/manifest.sh": "0035db95a071562f0896813f190a2af6c0cd4a20a7dca84e70fe80b3b52842d7",
     "settings/evidence.json": "a014b7a9397cf75880ccceafa29d805cd127a2db99892edcce33d0d771dbeef5",
     "settings/manifest.json": "5ee3a892a8e4bbc170d80539b34514f245c5ba62a87572e948a7b7c1b2b7e769",

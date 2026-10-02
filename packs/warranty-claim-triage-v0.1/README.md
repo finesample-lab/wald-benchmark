@@ -9,6 +9,7 @@ It is deliberately **not** a warranty-coverage or auto-payment system. A release
 - A claim filed by one customer is also projected into the product serial's history.
 - Reuse of the same serial by another customer is visible without a graph engine or application-code change.
 - Product registration is a real input: it establishes the serial's first known registration time.
+- A serial on the reviewed abuse list cannot clear and is sent to expedited human review when no stronger escalation condition applies.
 - A closed investigation contributes only when it explicitly records `abuse_confirmed`; an ordinary denial is not treated as abuse.
 - Wald's calibration, blind sampling, evidence and lease rules still determine whether any release authority has been earned.
 
