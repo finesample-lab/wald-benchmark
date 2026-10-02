@@ -56,4 +56,4 @@ The command publishes one immutable PackVersion and returns a Change for a diffe
 
 ## Benchmark claim
 
-This pack supports a narrow, checkable claim: the released Wald image can validate and execute a non-fraud domain expressed in pack files, including a cross-customer serial projection, without a Rust change. The public benchmark should call it a synthetic composition and conformance example until a separate warranty history, matured outcomes, assessment and independent verifier are published.
+This pack supports a narrow, checkable claim: the released Wald image can validate and execute a non-fraud domain expressed in pack files, including a cross-customer serial projection, without a Rust change. The accompanying [synthetic assessment](../../benchmark/warranty-claim-triage-v0.1/README.md) adds a deterministic history, matured outcomes and an independent verifier. Both the pack and assessment remain vendor-authored composition evidence, not production warranty evidence.

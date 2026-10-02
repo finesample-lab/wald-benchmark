@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "wald-public-assessment-fixture-v1",
+  "id": "wald-warranty-claim-triage",
+  "version": "0.1.2",
+  "kind": "historicalEnhancedAbuseReviewReleaseOpportunity",
+  "seed": "wald-warranty-claim-triage-v0.1:104729",
+  "pack": "warranty-claim-triage",
+  "packVersion": "0.1.0",
+  "alerts": 400,
+  "calibrationAlerts": 200,
+  "evaluationAlerts": 200,
+  "splitAt": "2025-06-01T00:30:00Z",
+  "asOf": "2025-11-01T00:00:00.000Z",
+  "labelObservationLagDays": 120,
+  "minutesPerReview": 12,
+  "minCalibrationSamples": 150,
+  "composition": {
+    "calibration": {
+      "familiarBenign": 164,
+      "familiarAdverse": 3,
+      "obviousAdverse": 33
+    },
+    "evaluation": {
+      "familiarBenign": 150,
+      "familiarAdverse": 3,
+      "obviousAdverse": 37,
+      "unfamiliarBenign": 10
+    }
+  },
+  "outcomes": {
+    "abuse_confirmed": 76,
+    "no_abuse_found": 324
+  },
+  "expected": {
+    "packSha256": "sha256:72d548fcedf7cb312d120df57844b33c7bb551c802576bf64086b56b60abdc3d",
+    "resultSha256": "sha256:5f31e404d3ef83ad2e2041edb9ca1cadbb070b605c4470743c91f64a7fba7d83",
+    "evaluationAlerts": 200,
+    "evaluationLabeled": 200,
+    "wouldRelease": 153,
+    "wouldReleaseLabeled": 153,
+    "wouldReleaseAdverse": 3,
+    "wouldReleaseBenign": 150,
+    "wouldReleaseWithoutFamiliarity": 163,
+    "wouldReleaseWithoutFamiliarityAdverse": 3,
+    "illustrativeReviewMinutes": 1800
+  },
+  "files": {
+    "alerts.jsonl": "8ed16031084491fd1d2aaaa29cbdcc85270ef96b1b54d2a7ab8d8914c08d5474",
+    "events.jsonl": "7d2902e9d6683a20befbe047b1ee5642ab93e068721b19749b00754bfa647564",
+    "labels.jsonl": "a8bcaea94a0d5e36c74e0f36ff1d24cda31f08adfe3481011d745986efad2583",
+    "references.jsonl": "72a05440ae020671510121201cd3b9f8f46d35f2f19f893d759d7617be20e75b",
+    "state.jsonl": "08f112aedd757dd39802d15ef1a138de84ce75b5709040d38cc39834d79a107a",
+    "thresholds.json": "1abaeaf3157268d85c5bd7483e42f5d9a4fe9045595c4938a1d7771051e0a064"
+  },
+  "packFiles": {
+    "LICENSE": "7a05b311f354fee3ff1cdfc699b5f0ae60ff099368a0e36d3442ed98fe12f047",
+    "MANIFEST.sha256": "f65f10efea52a0b07114bddfcb4ea852d0d26b6f4bf229524a56a395909b9147",
+    "README.md": "fdde57583cee0585860ab430efe3cbfefe9e70840d007f76d1ba99f41007250c",
+    "catalog.json": "259fb23a267abc1cea9f1a8c19dab6b69de6b292a107714290d2e35dfaaabb60",
+    "domain.json": "3ca9d4df57c74419a8a82f02d0352e47bf749066d4986aadba125e07e25f002a",
+    "facts.json": "4ca3fee46f6ffd4544d1cd2732954e85597056aee000df1864b966220447dcd0",
+    "fixtures/customer_history_boundaries.json": "1db8dad8d3f1635df1f2cd7c9e81ca607731de958c038e34e3a6171af5bbf9f3",
+    "fixtures/first_claim.json": "06953f37290998a8c6e42a34be7e904735ef02c42734bcf389d33c91a0d3446f",
+    "fixtures/serial_cross_customer.json": "2c4e2796c41d9caa758de5c6433c0d71a5286c42e7175e876a667547fd5580f5",
+    "pack.json": "cab9097c60ffd538bbd9b172e7c04168fe3fc2ce722116e831a471627faab654",
+    "release-conditions.json": "e759b4745e1c6898aff2314a67e93ce571126cf29d7b40bd7a84b12d4f0c7bd7",
+    "scripts/manifest.sh": "0035db95a071562f0896813f190a2af6c0cd4a20a7dca84e70fe80b3b52842d7",
+    "settings/evidence.json": "a014b7a9397cf75880ccceafa29d805cd127a2db99892edcce33d0d771dbeef5",
+    "settings/manifest.json": "5ee3a892a8e4bbc170d80539b34514f245c5ba62a87572e948a7b7c1b2b7e769",
+    "settings/sampling.json": "9641ac92088cedd0b040435f6dd46bb0c7b373f268c8ddc08ca3baa11083b93b",
+    "settings/thresholds.json": "9a7371c38bade6bba4660ea8ef259f3379a35f467cc744160be1b09a7c5d6ae6",
+    "settings/triggers.json": "e3f17e6b9d68e8db53c909535289ce875ae9553a6cbe1367a2bf78988303d93f"
+  }
+}

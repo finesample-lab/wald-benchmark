@@ -1,0 +1,48 @@
+# Verifies the public warranty pack against one immutable Wald release image.
+# The job is deliberately separate from Wald's release publication workflow:
+# it proves this repository's mounted pack and synthetic history without
+# changing or republishing the already-released evaluator image.
+name: verify warranty composition
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packs/warranty-claim-triage-v0.1/**"
+      - "benchmark/warranty-claim-triage-v0.1/**"
+      - ".github/workflows/verify-warranty.yml"
+  pull_request:
+    paths:
+      - "packs/warranty-claim-triage-v0.1/**"
+      - "benchmark/warranty-claim-triage-v0.1/**"
+      - ".github/workflows/verify-warranty.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: warranty-composition-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      WALD_IMAGE: ghcr.io/finesample-lab/wald@sha256:cb7202c48d1e502a42d0c5435a9daadcbb3336e5b0955f8c9aa4a7289ee2d95d
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pull the immutable Wald image
+        run: docker pull "$WALD_IMAGE"
+      - name: Run the warranty assessment twice
+        run: |
+          benchmark/warranty-claim-triage-v0.1/run.sh \
+            --image "$WALD_IMAGE" \
+            --out "$RUNNER_TEMP/warranty-assessment"
+          benchmark/warranty-claim-triage-v0.1/run.sh \
+            --image "$WALD_IMAGE" \
+            --out "$RUNNER_TEMP/warranty-assessment-repeat"
+          diff -ru \
+            "$RUNNER_TEMP/warranty-assessment" \
+            "$RUNNER_TEMP/warranty-assessment-repeat"

@@ -18,6 +18,7 @@ assessment.**
 
 [Try Wald on your history](#try-wald-on-your-history) ·
 [Run the public fixture](#run-it) ·
+[See another decision](#one-wald-image-another-decision) ·
 [Read the fixture design](benchmark/public-assessment-v0.1/README.md) ·
 [Download a release](https://github.com/finesample-lab/wald-benchmark/releases)
 
@@ -56,6 +57,25 @@ fineSample wrote the fixture, evaluator, and verifier. Keeping the verifier
 separate catches reproducibility and contract failures, but it is not
 independent validation. **Running the same evaluator on your own history and
 independently observed outcomes is the benchmark that matters.**
+
+## One Wald image, another decision
+
+Fraud is Wald's first public application, not a boundary in the product. The
+[warranty claim triage pack](packs/warranty-claim-triage-v0.1/README.md) gives
+the same released Wald image a different history, vocabulary and question—no
+new product source required.
+
+For each claim, the pack composes the customer history, product registration,
+prior investigations and cross-customer serial history that existed when the
+claim arrived. It then asks one useful question: **can this claim leave
+enhanced abuse review and enter ordinary warranty adjudication?** It never
+answers whether a warranty is valid or a claim should be paid.
+
+[Run the warranty composition benchmark](benchmark/warranty-claim-triage-v0.1/README.md)
+to inspect the pack, its three conformance cases, a deterministic 400-claim
+history and the separate result verifier. This track proves composition and
+reproducibility. Because fineSample authored the synthetic data and pack, it is
+not production warranty evidence or an accuracy comparison.
 
 ## Run it
 
@@ -143,19 +163,22 @@ time split, outcome lag, and interpretation guide are in the
 This repository owns the public benchmark, not Wald's product source. The
 boundary is intentionally small:
 
-- `assessment.json` declares the fixed fixture and expected result;
-- `generate.py` produces and hash-checks the synthetic inputs;
-- `run.sh` runs a selected Wald image without network access;
-- `verify.py` checks the reports without sharing evaluator code; and
+- `benchmark/public-assessment-v0.1/` holds the first alert-history assessment;
+- `packs/warranty-claim-triage-v0.1/` holds the executable, MIT-licensed
+  warranty composition pack;
+- `benchmark/warranty-claim-triage-v0.1/` holds its synthetic history, runner
+  and independent verifier; and
 - `.github/workflows/release.yml` binds each public release to an exact image
-  digest and publishes durable evidence.
+  digest and publishes durable evidence, while `verify-warranty.yml` checks
+  the mounted warranty pack against that immutable image.
 
 ## Licence
 
 The benchmark source and synthetic fixture definition are available under the
-[MIT License](LICENSE). That licence does not apply to Wald, its image, its
-binary, its decision packs, or fineSample trademarks. The evaluator is
-distributed under [Wald's evaluation terms](EVALUATION-TERMS.md).
+[MIT License](LICENSE). The warranty decision pack carries its own
+[MIT License](packs/warranty-claim-triage-v0.1/LICENSE). Neither licence applies
+to Wald's image, binary, other decision packs, or fineSample trademarks. The
+evaluator is distributed under [Wald's evaluation terms](EVALUATION-TERMS.md).
 
 `LICENSE` is standard legal text and intentionally has no maintenance header.
 Generated JSONL inputs and reports are untracked; the versioned generator and
