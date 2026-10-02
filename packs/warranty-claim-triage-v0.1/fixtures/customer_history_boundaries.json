@@ -1,0 +1,177 @@
+{
+  "name": "customer_history_boundaries",
+  "catalog": {
+    "fields": {
+      "fields": {
+        "eventId": {"path": "eventId", "type": "text", "nullable": false},
+        "entityId": {"path": "entityId", "type": "text", "nullable": false, "sensitivity": "token"},
+        "entityType": {"path": "entityType", "type": "text", "nullable": false},
+        "eventType": {"path": "eventType", "type": "text", "nullable": false},
+        "occurredAt": {"path": "occurredAt", "type": "timestamp", "nullable": false},
+        "data.amount": {"path": "data.amount", "type": "money", "scale": 2, "currencyField": "data.currency"},
+        "data.currency": {"path": "data.currency", "type": "text"},
+        "data.investigationFinding": {"path": "data.investigationFinding", "type": "text"}
+      }
+    },
+    "entityTypes": ["customer"],
+    "eventTypes": ["claim.filed", "claim.investigated", "purchase.completed", "service.completed"],
+    "projections": [],
+    "projectionRules": {},
+    "eventFeeds": {
+      "claim.filed": {"maxSilence": "7d"},
+      "claim.investigated": {"maxSilence": "30d"},
+      "purchase.completed": {"maxSilence": "7d"},
+      "service.completed": {"maxSilence": "7d"}
+    },
+    "stateSources": {
+      "customerProfile": {
+        "tenureDays": {"path": "tenureDays", "type": "integer"},
+        "tier": {"path": "tier", "type": "text"}
+      }
+    },
+    "referenceSets": []
+  },
+  "log": [
+    {
+      "state": {
+        "stateRevisionId": "s1",
+        "entityId": "c1",
+        "source": "customerProfile",
+        "effectiveAt": "2026-09-15T00:00:00Z",
+        "data": {"tenureDays": 800, "tier": "silver"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "outside-90",
+        "entityId": "c1",
+        "entityType": "customer",
+        "eventType": "claim.filed",
+        "occurredAt": "2026-07-03T12:00:00Z",
+        "data": {"amount": "999.00", "currency": "USD"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "edge-30",
+        "entityId": "c1",
+        "entityType": "customer",
+        "eventType": "claim.filed",
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "data": {"amount": "50.00", "currency": "USD"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "inside-30",
+        "entityId": "c1",
+        "entityType": "customer",
+        "eventType": "claim.filed",
+        "occurredAt": "2026-09-02T12:00:00Z",
+        "data": {"amount": "100.00", "currency": "USD"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "other-currency",
+        "entityId": "c1",
+        "entityType": "customer",
+        "eventType": "claim.filed",
+        "occurredAt": "2026-09-20T12:00:00Z",
+        "data": {"amount": "200.00", "currency": "CAD"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "investigation-1",
+        "entityId": "c1",
+        "entityType": "customer",
+        "eventType": "claim.investigated",
+        "occurredAt": "2026-09-25T12:00:00Z",
+        "data": {"investigationFinding": "abuse_confirmed"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "purchase-1",
+        "entityId": "c1",
+        "entityType": "customer",
+        "eventType": "purchase.completed",
+        "occurredAt": "2026-09-30T09:00:00Z",
+        "data": {}
+      }
+    },
+    {
+      "event": {
+        "eventId": "service-1",
+        "entityId": "c1",
+        "entityType": "customer",
+        "eventType": "service.completed",
+        "occurredAt": "2026-09-30T10:00:00Z",
+        "data": {}
+      }
+    },
+    {
+      "event": {
+        "eventId": "current",
+        "entityId": "c1",
+        "entityType": "customer",
+        "eventType": "claim.filed",
+        "occurredAt": "2026-10-01T12:00:00Z",
+        "data": {"amount": "125.00", "currency": "USD"}
+      }
+    }
+  ],
+  "featureSet": {
+    "schemaVersion": "1.0",
+    "id": "customerClaimActivity",
+    "appliesTo": ["customer"],
+    "features": [
+      {"name": "claimsFiled90d", "type": "integer", "op": "count", "window": "90d", "current": "exclude", "where": {"eventType": "claim.filed"}},
+      {"name": "claimsFiled30d", "type": "integer", "op": "count", "window": "30d", "current": "exclude", "where": {"eventType": "claim.filed"}},
+      {
+        "name": "totalClaimed90d",
+        "type": "money",
+        "op": "sum",
+        "field": "data.amount",
+        "currency": {"current": "data.currency"},
+        "window": "90d",
+        "current": "exclude",
+        "where": {"eventType": "claim.filed"}
+      },
+      {
+        "name": "confirmedAbuseFindings365d",
+        "type": "integer",
+        "op": "count",
+        "window": "365d",
+        "current": "exclude",
+        "where": {
+          "all": [
+            {"eventType": "claim.investigated"},
+            {"eq": [{"field": "data.investigationFinding"}, {"value": "abuse_confirmed"}]}
+          ]
+        }
+      },
+      {"name": "lastClaimAt", "type": "timestamp", "op": "lastSeen", "window": "365d", "current": "exclude", "where": {"eventType": "claim.filed"}},
+      {"name": "purchases365d", "type": "integer", "op": "count", "window": "365d", "current": "exclude", "where": {"eventType": "purchase.completed"}},
+      {"name": "services365d", "type": "integer", "op": "count", "window": "365d", "current": "exclude", "where": {"eventType": "service.completed"}},
+      {"name": "tenureDays", "type": "integer", "op": "lookup", "source": "customerProfile", "field": "tenureDays", "maxAge": "30d"},
+      {"name": "tier", "type": "text", "op": "lookup", "source": "customerProfile", "field": "tier", "maxAge": "30d"}
+    ]
+  },
+  "compute": {"eventId": "current"},
+  "expect": {
+    "features": {
+      "claimsFiled90d": 3,
+      "claimsFiled30d": 2,
+      "totalClaimed90d": {"amount": "150.00", "currency": "USD"},
+      "confirmedAbuseFindings365d": 1,
+      "lastClaimAt": "2026-09-20T12:00:00.000Z",
+      "purchases365d": 1,
+      "services365d": 1,
+      "tenureDays": 800,
+      "tier": "silver"
+    },
+    "issues": []
+  }
+}

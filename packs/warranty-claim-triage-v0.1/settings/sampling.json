@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "rates": {},
+  "defaultRate": "0.05",
+  "exposureTiers": {
+    "small": "100.00",
+    "medium": "500.00"
+  },
+  "learningRate": "0.02"
+}

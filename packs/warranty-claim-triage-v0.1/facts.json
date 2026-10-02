@@ -1,0 +1,140 @@
+{
+  "featureSets": [
+    {
+      "schemaVersion": "1.0",
+      "id": "customerClaimActivity",
+      "appliesTo": ["customer"],
+      "features": [
+        {
+          "name": "claimsFiled90d",
+          "label": "Claims filed before this one, 90 d",
+          "type": "integer",
+          "op": "count",
+          "window": "90d",
+          "current": "exclude",
+          "where": {"eventType": "claim.filed"}
+        },
+        {
+          "name": "claimsFiled30d",
+          "label": "Claims filed before this one, 30 d",
+          "type": "integer",
+          "op": "count",
+          "window": "30d",
+          "current": "exclude",
+          "where": {"eventType": "claim.filed"}
+        },
+        {
+          "name": "totalClaimed90d",
+          "label": "Total claimed in this currency before this one, 90 d",
+          "type": "money",
+          "op": "sum",
+          "field": "data.amount",
+          "currency": {"current": "data.currency"},
+          "window": "90d",
+          "current": "exclude",
+          "where": {"eventType": "claim.filed"}
+        },
+        {
+          "name": "confirmedAbuseFindings365d",
+          "label": "Confirmed abuse findings before this one, 12 m",
+          "type": "integer",
+          "op": "count",
+          "window": "365d",
+          "current": "exclude",
+          "where": {
+            "all": [
+              {"eventType": "claim.investigated"},
+              {
+                "eq": [
+                  {"field": "data.investigationFinding"},
+                  {"value": "abuse_confirmed"}
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "lastClaimAt",
+          "label": "Last claim before this one",
+          "type": "timestamp",
+          "op": "lastSeen",
+          "window": "365d",
+          "current": "exclude",
+          "where": {"eventType": "claim.filed"}
+        },
+        {
+          "name": "purchases365d",
+          "label": "Purchases before this one, 12 m",
+          "type": "integer",
+          "op": "count",
+          "window": "365d",
+          "current": "exclude",
+          "where": {"eventType": "purchase.completed"}
+        },
+        {
+          "name": "services365d",
+          "label": "Service visits before this one, 12 m",
+          "type": "integer",
+          "op": "count",
+          "window": "365d",
+          "current": "exclude",
+          "where": {"eventType": "service.completed"}
+        },
+        {
+          "name": "tenureDays",
+          "label": "Customer tenure, days",
+          "type": "integer",
+          "op": "lookup",
+          "source": "customerProfile",
+          "field": "tenureDays",
+          "maxAge": "30d"
+        },
+        {
+          "name": "tier",
+          "label": "Customer tier",
+          "type": "text",
+          "op": "lookup",
+          "source": "customerProfile",
+          "field": "tier",
+          "maxAge": "30d"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "serialClaimActivity",
+      "appliesTo": ["serial"],
+      "features": [
+        {
+          "name": "priorClaims365d",
+          "label": "Claims on this serial before this one, 12 m",
+          "type": "integer",
+          "op": "count",
+          "window": "365d",
+          "current": "exclude",
+          "projection": "serial",
+          "where": {"eventType": "serial.claim.filed"}
+        },
+        {
+          "name": "registeredAt",
+          "label": "First registration of this serial, 10 y",
+          "type": "timestamp",
+          "op": "min",
+          "field": "occurredAt",
+          "window": "3650d",
+          "current": "include",
+          "projection": "serial",
+          "where": {"eventType": "serial.registered"}
+        },
+        {
+          "name": "onAbuseList",
+          "label": "Serial on the reviewed abuse list",
+          "type": "boolean",
+          "op": "exists",
+          "source": "abuseSerials",
+          "where": {"key": {"current": "data.serialNumber"}}
+        }
+      ]
+    }
+  ]
+}

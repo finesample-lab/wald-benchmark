@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "values": {
+    "pNoAbuseMin": "0.95"
+  },
+  "baseCurrency": "USD",
+  "exposureCeilings": {
+    "standard": "100.00",
+    "silver": "250.00",
+    "gold": "500.00"
+  },
+  "riskTierField": "customer.tier",
+  "rateLimitCount": 3,
+  "rateLimitWindowHours": 24,
+  "minCalibrationSamples": 500,
+  "maxCalibrationError": "0.05",
+  "minHeldOut": 200
+}

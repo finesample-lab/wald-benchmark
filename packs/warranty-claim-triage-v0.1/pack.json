@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "warranty-claim-triage",
+  "version": "0.1.0",
+  "status": "synthetic-example",
+  "license": "MIT",
+  "compatibility": {
+    "wald": ">=0.1.2 <0.2.0",
+    "api": "2026-09-28"
+  }
+}

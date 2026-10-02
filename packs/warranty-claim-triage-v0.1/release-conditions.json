@@ -1,0 +1,30 @@
+{
+  "id": "warrantyClaimAbuseRelease",
+  "version": 1,
+  "alertClass": "claimRisk",
+  "exposureCeiling": "byRiskTier",
+  "clear": {
+    "all": [
+      {
+        "answer": "p_no_abuse",
+        "gte": {"threshold": "pNoAbuseMin"}
+      },
+      {
+        "state": "customer.confirmedAbuseFindings365d",
+        "lte": 0
+      },
+      {
+        "state": "serial.onAbuseList",
+        "eq": false
+      }
+    ]
+  },
+  "escalate": {
+    "answerTop": "abusePattern",
+    "in": ["serial_recycling", "staged_failure", "bulk_claiming"]
+  },
+  "expedite": {
+    "answerTop": "priority",
+    "in": ["critical"]
+  }
+}

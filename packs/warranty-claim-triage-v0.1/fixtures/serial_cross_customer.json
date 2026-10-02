@@ -1,0 +1,152 @@
+{
+  "name": "serial_cross_customer",
+  "catalog": {
+    "fields": {
+      "fields": {
+        "eventId": {"path": "eventId", "type": "text", "nullable": false},
+        "entityId": {"path": "entityId", "type": "text", "nullable": false, "sensitivity": "token"},
+        "entityType": {"path": "entityType", "type": "text", "nullable": false},
+        "eventType": {"path": "eventType", "type": "text", "nullable": false},
+        "occurredAt": {"path": "occurredAt", "type": "timestamp", "nullable": false},
+        "data.serialNumber": {"path": "data.serialNumber", "type": "text", "sensitivity": "token"}
+      }
+    },
+    "entityTypes": ["customer", "serial"],
+    "eventTypes": ["claim.filed", "product.registered", "serial.claim.filed", "serial.registered"],
+    "projections": ["serial"],
+    "projectionRules": {
+      "claim.filed": [
+        {
+          "projection": "serial",
+          "entityField": "data.serialNumber",
+          "entityType": "serial",
+          "eventType": "serial.claim.filed"
+        }
+      ],
+      "product.registered": [
+        {
+          "projection": "serial",
+          "entityField": "data.serialNumber",
+          "entityType": "serial",
+          "eventType": "serial.registered"
+        }
+      ]
+    },
+    "eventFeeds": {
+      "claim.filed": {"maxSilence": "7d"},
+      "product.registered": {"maxSilence": "30d"}
+    },
+    "stateSources": {},
+    "referenceSets": ["abuseSerials"]
+  },
+  "log": [
+    {
+      "reference": {
+        "setId": "abuseSerials",
+        "keys": ["SN-SHARED"]
+      }
+    },
+    {
+      "event": {
+        "eventId": "registration-target",
+        "entityId": "c1",
+        "entityType": "customer",
+        "eventType": "product.registered",
+        "occurredAt": "2026-01-10T09:00:00Z",
+        "data": {"serialNumber": "SN-SHARED"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "edge-365",
+        "entityId": "c0",
+        "entityType": "customer",
+        "eventType": "claim.filed",
+        "occurredAt": "2025-09-20T10:00:00Z",
+        "data": {"serialNumber": "SN-SHARED"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "customer-one",
+        "entityId": "c1",
+        "entityType": "customer",
+        "eventType": "claim.filed",
+        "occurredAt": "2026-08-01T10:00:00Z",
+        "data": {"serialNumber": "SN-SHARED"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "customer-two",
+        "entityId": "c2",
+        "entityType": "customer",
+        "eventType": "claim.filed",
+        "occurredAt": "2026-09-01T10:00:00Z",
+        "data": {"serialNumber": "SN-SHARED"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "registration-feed-fresh",
+        "entityId": "c9",
+        "entityType": "customer",
+        "eventType": "product.registered",
+        "occurredAt": "2026-09-19T10:00:00Z",
+        "data": {"serialNumber": "SN-OTHER"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "current",
+        "entityId": "c3",
+        "entityType": "customer",
+        "eventType": "claim.filed",
+        "occurredAt": "2026-09-20T10:00:00Z",
+        "data": {"serialNumber": "SN-SHARED"}
+      }
+    }
+  ],
+  "featureSet": {
+    "schemaVersion": "1.0",
+    "id": "serialClaimActivity",
+    "appliesTo": ["serial"],
+    "features": [
+      {
+        "name": "priorClaims365d",
+        "type": "integer",
+        "op": "count",
+        "window": "365d",
+        "current": "exclude",
+        "projection": "serial",
+        "where": {"eventType": "serial.claim.filed"}
+      },
+      {
+        "name": "registeredAt",
+        "type": "timestamp",
+        "op": "min",
+        "field": "occurredAt",
+        "window": "3650d",
+        "current": "include",
+        "projection": "serial",
+        "where": {"eventType": "serial.registered"}
+      },
+      {
+        "name": "onAbuseList",
+        "type": "boolean",
+        "op": "exists",
+        "source": "abuseSerials",
+        "where": {"key": {"current": "data.serialNumber"}}
+      }
+    ]
+  },
+  "compute": {"eventId": "current", "projection": "serial"},
+  "expect": {
+    "features": {
+      "priorClaims365d": 2,
+      "registeredAt": "2026-01-10T09:00:00.000Z",
+      "onAbuseList": true
+    },
+    "issues": []
+  }
+}

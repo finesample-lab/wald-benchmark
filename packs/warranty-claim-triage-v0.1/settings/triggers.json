@@ -1,0 +1,5 @@
+{
+  "windowDecisions": 200,
+  "maxProviderFaultPerMille": 50,
+  "maxIncompletePerMille": 100
+}

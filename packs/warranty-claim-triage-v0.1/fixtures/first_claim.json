@@ -1,0 +1,159 @@
+{
+  "name": "first_claim",
+  "catalog": {
+    "fields": {
+      "fields": {
+        "eventId": {"path": "eventId", "type": "text", "nullable": false},
+        "entityId": {"path": "entityId", "type": "text", "nullable": false, "sensitivity": "token"},
+        "entityType": {"path": "entityType", "type": "text", "nullable": false},
+        "eventType": {"path": "eventType", "type": "text", "nullable": false},
+        "occurredAt": {"path": "occurredAt", "type": "timestamp", "nullable": false},
+        "data.amount": {"path": "data.amount", "type": "money", "scale": 2, "currencyField": "data.currency"},
+        "data.currency": {"path": "data.currency", "type": "text"},
+        "data.investigationFinding": {"path": "data.investigationFinding", "type": "text"}
+      }
+    },
+    "entityTypes": ["customer"],
+    "eventTypes": ["claim.filed", "claim.investigated", "purchase.completed", "service.completed"],
+    "projections": [],
+    "projectionRules": {},
+    "eventFeeds": {
+      "claim.filed": {"maxSilence": "7d"},
+      "claim.investigated": {"maxSilence": "30d"},
+      "purchase.completed": {"maxSilence": "7d"},
+      "service.completed": {"maxSilence": "7d"}
+    },
+    "stateSources": {
+      "customerProfile": {
+        "tenureDays": {"path": "tenureDays", "type": "integer"},
+        "tier": {"path": "tier", "type": "text"}
+      }
+    },
+    "referenceSets": []
+  },
+  "log": [
+    {
+      "state": {
+        "stateRevisionId": "s1",
+        "entityId": "c1",
+        "source": "customerProfile",
+        "effectiveAt": "2026-09-01T00:00:00Z",
+        "data": {"tenureDays": 400, "tier": "gold"}
+      }
+    },
+    {
+      "event": {
+        "eventId": "e1",
+        "entityId": "c1",
+        "entityType": "customer",
+        "eventType": "claim.filed",
+        "occurredAt": "2026-09-20T10:00:00Z",
+        "data": {"amount": "129.99", "currency": "USD"}
+      }
+    }
+  ],
+  "featureSet": {
+    "schemaVersion": "1.0",
+    "id": "customerClaimActivity",
+    "appliesTo": ["customer"],
+    "features": [
+      {
+        "name": "claimsFiled90d",
+        "type": "integer",
+        "op": "count",
+        "window": "90d",
+        "current": "exclude",
+        "where": {"eventType": "claim.filed"}
+      },
+      {
+        "name": "claimsFiled30d",
+        "type": "integer",
+        "op": "count",
+        "window": "30d",
+        "current": "exclude",
+        "where": {"eventType": "claim.filed"}
+      },
+      {
+        "name": "totalClaimed90d",
+        "type": "money",
+        "op": "sum",
+        "field": "data.amount",
+        "currency": {"current": "data.currency"},
+        "window": "90d",
+        "current": "exclude",
+        "where": {"eventType": "claim.filed"}
+      },
+      {
+        "name": "confirmedAbuseFindings365d",
+        "type": "integer",
+        "op": "count",
+        "window": "365d",
+        "current": "exclude",
+        "where": {
+          "all": [
+            {"eventType": "claim.investigated"},
+            {"eq": [{"field": "data.investigationFinding"}, {"value": "abuse_confirmed"}]}
+          ]
+        }
+      },
+      {
+        "name": "lastClaimAt",
+        "type": "timestamp",
+        "op": "lastSeen",
+        "window": "365d",
+        "current": "exclude",
+        "where": {"eventType": "claim.filed"}
+      },
+      {
+        "name": "purchases365d",
+        "type": "integer",
+        "op": "count",
+        "window": "365d",
+        "current": "exclude",
+        "where": {"eventType": "purchase.completed"}
+      },
+      {
+        "name": "services365d",
+        "type": "integer",
+        "op": "count",
+        "window": "365d",
+        "current": "exclude",
+        "where": {"eventType": "service.completed"}
+      },
+      {
+        "name": "tenureDays",
+        "type": "integer",
+        "op": "lookup",
+        "source": "customerProfile",
+        "field": "tenureDays",
+        "maxAge": "30d"
+      },
+      {
+        "name": "tier",
+        "type": "text",
+        "op": "lookup",
+        "source": "customerProfile",
+        "field": "tier",
+        "maxAge": "30d"
+      }
+    ]
+  },
+  "compute": {"eventId": "e1"},
+  "expect": {
+    "features": {
+      "claimsFiled90d": 0,
+      "claimsFiled30d": 0,
+      "totalClaimed90d": null,
+      "confirmedAbuseFindings365d": 0,
+      "lastClaimAt": null,
+      "purchases365d": 0,
+      "services365d": 0,
+      "tenureDays": 400,
+      "tier": "gold"
+    },
+    "issues": [
+      ["lastClaimAt", "insufficientData"],
+      ["totalClaimed90d", "insufficientData"]
+    ]
+  }
+}

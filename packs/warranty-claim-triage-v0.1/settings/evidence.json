@@ -1,0 +1,9 @@
+{
+  "acceptableRate": "0.005",
+  "unacceptableRate": "0.02",
+  "alpha": "0.05",
+  "beta": "0.10",
+  "maxEvidenceAgeHours": 5040,
+  "labelLatencyHours": 2880,
+  "recentFalseStopsPerYear": "1"
+}

@@ -1,0 +1,98 @@
+{
+  "fields": {
+    "fields": {
+      "eventId": {"path": "eventId", "type": "text", "nullable": false},
+      "entityId": {"path": "entityId", "type": "text", "nullable": false, "sensitivity": "token"},
+      "entityType": {"path": "entityType", "type": "text", "nullable": false},
+      "eventType": {"path": "eventType", "type": "text", "nullable": false},
+      "occurredAt": {"path": "occurredAt", "type": "timestamp", "nullable": false},
+      "data.amount": {
+        "path": "data.amount",
+        "type": "money",
+        "scale": 2,
+        "currencyField": "data.currency",
+        "description": "Amount claimed, as decimal text"
+      },
+      "data.currency": {
+        "path": "data.currency",
+        "type": "text",
+        "description": "ISO 4217 currency of the claimed amount"
+      },
+      "data.channel": {
+        "path": "data.channel",
+        "type": "text",
+        "description": "Where the claim was filed: online, store, or phone"
+      },
+      "data.claimId": {
+        "path": "data.claimId",
+        "type": "text",
+        "sensitivity": "token",
+        "description": "Opaque claim id issued by the claims system"
+      },
+      "data.failureCode": {
+        "path": "data.failureCode",
+        "type": "text",
+        "description": "Reported failure, such as battery or hinge"
+      },
+      "data.investigationFinding": {
+        "path": "data.investigationFinding",
+        "type": "text",
+        "description": "Closed investigation finding: abuse_confirmed, no_abuse_found, or inconclusive"
+      },
+      "data.productCategory": {
+        "path": "data.productCategory",
+        "type": "text",
+        "description": "Product category, such as headphones or vacuum"
+      },
+      "data.serialNumber": {
+        "path": "data.serialNumber",
+        "type": "text",
+        "sensitivity": "token",
+        "description": "Tokenized serial used for a cross-customer serial history"
+      }
+    }
+  },
+  "entityTypes": ["customer", "serial"],
+  "eventTypes": [
+    "claim.filed",
+    "claim.investigated",
+    "purchase.completed",
+    "service.completed",
+    "product.registered",
+    "serial.claim.filed",
+    "serial.registered"
+  ],
+  "projections": ["serial"],
+  "projectionRules": {
+    "claim.filed": [
+      {
+        "projection": "serial",
+        "entityField": "data.serialNumber",
+        "entityType": "serial",
+        "eventType": "serial.claim.filed"
+      }
+    ],
+    "product.registered": [
+      {
+        "projection": "serial",
+        "entityField": "data.serialNumber",
+        "entityType": "serial",
+        "eventType": "serial.registered"
+      }
+    ]
+  },
+  "eventFeeds": {
+    "claim.filed": {"maxSilence": "7d"},
+    "claim.investigated": {"maxSilence": "30d"},
+    "purchase.completed": {"maxSilence": "7d"},
+    "service.completed": {"maxSilence": "7d"},
+    "product.registered": {"maxSilence": "30d"}
+  },
+  "stateSources": {
+    "customerProfile": {
+      "tenureDays": {"path": "tenureDays", "type": "integer"},
+      "tier": {"path": "tier", "type": "text"}
+    }
+  },
+  "referenceSets": ["abuseSerials"]
+}
