@@ -413,12 +413,12 @@ Fixtures inline the catalog and one feature set. Log entries may add events, poi
 
 | Task | Command | Availability |
 | --- | --- | --- |
-| Compile one feature set | `wald validate facts.json --catalog catalog.json` | Wald 0.1.2 |
-| Inspect its execution plan | `wald inspect facts.json --catalog catalog.json` | Wald 0.1.2 |
-| Compare two feature-set files | `wald diff before.json after.json --catalog catalog.json` | Wald 0.1.2 |
-| Run conformance fixtures | `wald test fixtures` | Wald 0.1.2 |
-| Validate the complete directory and settings offline | `wald pack validate <dir>` | Next Wald release; not in public 0.1.2 |
-| Publish one immutable PackVersion and submit its Change | `wald pack install <dir> --settings <dir>/settings --url <gateway>` | Wald 0.1.2 |
+| Compile one feature set | `wald validate facts.json --catalog catalog.json` | Wald 0.1.2+ |
+| Inspect its execution plan | `wald inspect facts.json --catalog catalog.json` | Wald 0.1.2+ |
+| Compare two feature-set files | `wald diff before.json after.json --catalog catalog.json` | Wald 0.1.2+ |
+| Run conformance fixtures | `wald test fixtures` | Wald 0.1.2+ |
+| Validate the complete directory and settings offline | `wald pack validate <dir>` | Wald 0.1.3+ |
+| Publish one immutable PackVersion and submit its Change | `wald pack install <dir> --settings <dir>/settings --url <gateway>` | Wald 0.1.2+ |
 
 `wald pack validate` automatically uses `<dir>/settings`. For a first publication, `wald pack install` requires the author to pass that directory explicitly. Later updates carry the tenant's active settings forward and change them only when `--settings` is supplied again, so omission cannot silently reset tuned values. Installation validates complete settings before its first network mutation. An `artifactAuthor` publishes and submits; a different approver signs the resulting Change.
 

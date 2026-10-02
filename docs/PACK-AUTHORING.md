@@ -103,7 +103,7 @@ Begin with no outbound capabilities. Adding a destination is a separate operatin
 
 A fixture contains a small synthetic log, the feature set being tested, the event to compute, and the exact expected features and issues. At minimum, prove the first or empty case and the boundary most likely to be misread. Larger packs should cover projections, currency, window edges, state age, and reference-list behavior where they apply.
 
-Wald 0.1.2 can run the starter's existing fact checks directly:
+Wald 0.1.2 and later can run the starter's existing fact checks directly:
 
 ```sh
 wald validate packs/minimal-v0.1/facts.json \
@@ -121,13 +121,13 @@ benchmark/warranty-claim-triage-v0.1/run.sh \
 
 ## 8. Validate the complete pack
 
-The next Wald release adds one offline, non-mutating command for the complete directory:
+Wald 0.1.3 adds one offline, non-mutating command for the complete directory:
 
 ```sh
 wald pack validate packs/my-pack
 ```
 
-It loads the same pack and settings files as installation, validates their cross-file references and runtime types, and makes no network call. It is the canonical pre-publication check once that release is available. **The public Wald 0.1.2 image does not contain this command.** On 0.1.2, use `wald validate`, `wald test`, the pack's manifest check, and its benchmark runner as shown above.
+It loads the same pack and settings files as installation, validates their cross-file references and runtime types, and makes no network call. It is the canonical pre-publication check in Wald 0.1.3 and later. The earlier 0.1.2 image can still run `wald validate`, `wald test`, the pack's manifest check, and its pinned benchmark runner as shown above, but it cannot validate the complete directory as one contract.
 
 After changing any distributed file, regenerate and verify `MANIFEST.sha256` using the pack's manifest script. Never edit the digest inventory by hand.
 

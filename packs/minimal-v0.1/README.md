@@ -27,7 +27,7 @@ JSON cannot carry maintenance comments, so this table is the guide for every mac
 
 ## Validate it
 
-Wald 0.1.2 can compile the fact and run the fixture:
+Wald 0.1.2 and later can compile the fact and run the fixture:
 
 ```sh
 wald validate facts.json --catalog catalog.json
@@ -35,13 +35,13 @@ wald test fixtures
 ./scripts/manifest.sh
 ```
 
-The next Wald release adds the complete, offline check:
+Wald 0.1.3 and later can validate the complete directory offline:
 
 ```sh
 wald pack validate .
 ```
 
-That command reads `./settings` automatically and makes no network call. It is not available in the public Wald 0.1.2 image.
+That command reads `./settings` automatically and makes no network call. The earlier 0.1.2 image can run the fact and fixture checks above, but does not contain the complete-pack command.
 
 ## Adapt it
 
