@@ -65,13 +65,18 @@ jobs:
           esac
           printf '%s\n' "$image_reference" > image-reference.txt
       - uses: sigstore/cosign-installer@v3
-      - name: Verify the image identity and bundled benchmark
+      - name: Verify the image identity, evidence, and bundled benchmark
         run: |
           image_reference=$(cat image-reference.txt)
-          cosign verify \
-            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
-            --certificate-identity "https://github.com/finesample-lab/wald/.github/workflows/release.yml@refs/tags/v$VERSION" \
-            "$image_reference"
+          issuer=https://token.actions.githubusercontent.com
+          identity="https://github.com/finesample-lab/wald/.github/workflows/release.yml@refs/tags/v$VERSION"
+          cosign verify --certificate-oidc-issuer "$issuer" \
+            --certificate-identity "$identity" "$image_reference"
+          for predicate in spdxjson custom slsaprovenance1; do
+            cosign verify-attestation --certificate-oidc-issuer "$issuer" \
+              --certificate-identity "$identity" --type "$predicate" \
+              "$image_reference"
+          done
           expected_revision=$(git rev-parse HEAD)
           image_revision=$(docker image inspect \
             --format '{{index .Config.Labels "io.finesample.wald.benchmark.revision"}}' \
