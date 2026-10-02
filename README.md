@@ -174,7 +174,8 @@ release jobs:
 1. compare the benchmark bundled in the image with this tagged source;
 2. pull the image without credentials and resolve its immutable digest;
 3. verify the image signature and embedded benchmark revision;
-4. run the assessment twice with networking disabled; and
+4. run the assessment with networking disabled and require its pinned result
+   hash; and
 5. publish the source, reports, image reference, and `SHA256SUMS` together.
 
 The image carries the same benchmark at

@@ -98,12 +98,6 @@ jobs:
           benchmark/public-assessment-v0.1/run.sh \
             --image "$(cat image-reference.txt)" \
             --out "$RUNNER_TEMP/wald-assessment-v$VERSION"
-          benchmark/public-assessment-v0.1/run.sh \
-            --image "$(cat image-reference.txt)" \
-            --out "$RUNNER_TEMP/wald-assessment-v$VERSION-repeat"
-          diff -ru \
-            "$RUNNER_TEMP/wald-assessment-v$VERSION" \
-            "$RUNNER_TEMP/wald-assessment-v$VERSION-repeat"
       - name: Build deterministic release archives
         run: |
           artifact_dir="$RUNNER_TEMP/artifacts"
