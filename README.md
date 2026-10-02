@@ -65,7 +65,7 @@ You need Python 3 and a Docker-compatible OCI container runtime.
 git clone https://github.com/finesample-lab/wald-benchmark.git
 cd wald-benchmark
 benchmark/public-assessment-v0.1/run.sh \
-  --image ghcr.io/finesample-lab/wald:v0.1.1 \
+  --image ghcr.io/finesample-lab/wald:v0.1.2 \
   --out /tmp/wald-assessment-0.1
 ```
 
@@ -112,7 +112,7 @@ docker run --rm \
   --user "$(id -u):$(id -g)" \
   -v "$PWD/export:/input:ro" \
   -v "$PWD/wald-results:/results" \
-  ghcr.io/finesample-lab/wald:v0.1.1 \
+  ghcr.io/finesample-lab/wald:v0.1.2 \
   backtest /input --out /results/assessment
 ```
 

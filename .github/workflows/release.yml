@@ -10,7 +10,7 @@ on:
       version:
         description: Wald release version without the leading v
         required: true
-        default: 0.1.1
+        default: 0.1.2
         type: string
 
 permissions:
@@ -71,11 +71,11 @@ jobs:
           issuer=https://token.actions.githubusercontent.com
           identity="https://github.com/finesample-lab/wald/.github/workflows/release.yml@refs/tags/v$VERSION"
           cosign verify --certificate-oidc-issuer "$issuer" \
-            --certificate-identity "$identity" "$image_reference"
+            --certificate-identity "$identity" "$image_reference" >/dev/null
           for predicate in spdxjson custom slsaprovenance1; do
             cosign verify-attestation --certificate-oidc-issuer "$issuer" \
               --certificate-identity "$identity" --type "$predicate" \
-              "$image_reference"
+              "$image_reference" >/dev/null
           done
           expected_revision=$(git rev-parse HEAD)
           image_revision=$(docker image inspect \
