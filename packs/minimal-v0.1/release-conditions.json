@@ -1,0 +1,26 @@
+{
+  "id": "reviewRelease",
+  "version": 1,
+  "alertClass": "review",
+  "exposureCeiling": "none",
+  "clear": {
+    "all": [
+      {
+        "answer": "p_clear",
+        "gte": {"threshold": "pClearMin"}
+      },
+      {
+        "state": "subject.priorReviews30d",
+        "lte": 0
+      }
+    ]
+  },
+  "escalate": {
+    "answerTop": "pattern",
+    "in": ["repeat_review", "other"]
+  },
+  "expedite": {
+    "state": "subject.priorReviews30d",
+    "gte": 3
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "model": {
+    "provider": "scorecard",
+    "artifact": "governed-active"
+  },
+  "outbox": {
+    "capabilities": []
+  },
+  "warehouseFeed": false,
+  "anchor": false,
+  "evidenceConnectors": [],
+  "localModels": []
+}
+

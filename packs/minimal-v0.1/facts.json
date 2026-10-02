@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "id": "subjectActivity",
+  "appliesTo": ["subject"],
+  "features": [
+    {
+      "name": "priorReviews30d",
+      "label": "Reviews before this one, 30 d",
+      "type": "integer",
+      "op": "count",
+      "window": "30d",
+      "current": "exclude",
+      "where": {"eventType": "review.opened"}
+    }
+  ]
+}
+

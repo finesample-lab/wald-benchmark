@@ -1,0 +1,7 @@
+{
+  "windowDecisions": 200,
+  "maxProviderFaultPerMille": 0,
+  "maxIncompletePerMille": 0,
+  "controlSources": {}
+}
+

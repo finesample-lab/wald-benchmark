@@ -1,0 +1,69 @@
+{
+  "name": "one_prior_review",
+  "catalog": {
+    "fields": {
+      "fields": {
+        "eventId": {"path": "eventId", "type": "text", "nullable": false},
+        "entityId": {"path": "entityId", "type": "text", "nullable": false, "sensitivity": "token"},
+        "entityType": {"path": "entityType", "type": "text", "nullable": false},
+        "eventType": {"path": "eventType", "type": "text", "nullable": false},
+        "occurredAt": {"path": "occurredAt", "type": "timestamp", "nullable": false}
+      }
+    },
+    "entityTypes": ["subject"],
+    "eventTypes": ["review.opened"],
+    "projections": [],
+    "projectionRules": {},
+    "eventFeeds": {
+      "review.opened": {"maxSilence": "7d"}
+    },
+    "stateSources": {},
+    "referenceSets": []
+  },
+  "log": [
+    {
+      "event": {
+        "eventId": "prior",
+        "entityId": "subject-1",
+        "entityType": "subject",
+        "eventType": "review.opened",
+        "occurredAt": "2026-09-15T10:00:00Z",
+        "data": {}
+      }
+    },
+    {
+      "event": {
+        "eventId": "current",
+        "entityId": "subject-1",
+        "entityType": "subject",
+        "eventType": "review.opened",
+        "occurredAt": "2026-09-20T10:00:00Z",
+        "data": {}
+      }
+    }
+  ],
+  "featureSet": {
+    "schemaVersion": "1.0",
+    "id": "subjectActivity",
+    "appliesTo": ["subject"],
+    "features": [
+      {
+        "name": "priorReviews30d",
+        "label": "Reviews before this one, 30 d",
+        "type": "integer",
+        "op": "count",
+        "window": "30d",
+        "current": "exclude",
+        "where": {"eventType": "review.opened"}
+      }
+    ]
+  },
+  "compute": {"eventId": "current"},
+  "expect": {
+    "features": {
+      "priorReviews30d": 1
+    },
+    "issues": []
+  }
+}
+

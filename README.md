@@ -19,6 +19,7 @@ assessment.**
 [Try Wald on your history](#try-wald-on-your-history) ·
 [Run the public fixture](#run-it) ·
 [See another decision](#one-wald-image-another-decision) ·
+[Author a pack](docs/PACK-AUTHORING.md) ·
 [Read the fixture design](benchmark/public-assessment-v0.1/README.md) ·
 [Download a release](https://github.com/finesample-lab/wald-benchmark/releases)
 
@@ -76,6 +77,29 @@ to inspect the pack, its three conformance cases, a deterministic 400-claim
 history and the separate result verifier. This track proves composition and
 reproducibility. Because fineSample authored the synthetic data and pack, it is
 not production warranty evidence or an accuracy comparison.
+
+## Bring your own decision
+
+Wald's domain boundary is a pack, not a product fork. A pack names the events
+and point-in-time facts Wald can use, the judgment it makes, the later outcomes
+that test it, and the exact boundary an alert may cross. The runtime keeps the
+same evidence, sampling, replay and authority machinery underneath it.
+
+The public authoring kit now includes:
+
+- a [step-by-step authoring guide](docs/PACK-AUTHORING.md);
+- the [versioned v0.1 format reference](docs/PACK-REFERENCE-v0.1.md);
+- a [minimal complete starter](packs/minimal-v0.1/README.md) with one event,
+  one fact and no outbound capability;
+- the [warranty pack](packs/warranty-claim-triage-v0.1/README.md) as the
+  advanced, cross-entity example; and
+- an [authoring skill](skills/author-a-wald-pack/SKILL.md) that helps a coding
+  agent interview the domain expert and work from those same public contracts.
+
+Start with the decision boundary in plain words, copy the smallest honest
+example, and prove the facts with synthetic fixtures before tuning a score or
+threshold. The kit documents accepted inputs and released commands; Wald's
+product source remains outside this repository.
 
 ## Run it
 
@@ -164,10 +188,14 @@ This repository owns the public benchmark, not Wald's product source. The
 boundary is intentionally small:
 
 - `benchmark/public-assessment-v0.1/` holds the first alert-history assessment;
+- `docs/` holds the human authoring workflow and versioned pack contract;
+- `packs/minimal-v0.1/` is the smallest complete decision-pack starter;
 - `packs/warranty-claim-triage-v0.1/` holds the executable, MIT-licensed
   warranty composition pack;
 - `benchmark/warranty-claim-triage-v0.1/` holds its synthetic history, runner
-  and independent verifier; and
+  and independent verifier;
+- `skills/author-a-wald-pack/` holds the agent workflow that follows the same
+  public guide and reference; and
 - `.github/workflows/release.yml` binds each public release to an exact image
   digest and publishes durable evidence, while `verify-warranty.yml` checks
   the mounted warranty pack against that immutable image.
@@ -175,10 +203,11 @@ boundary is intentionally small:
 ## Licence
 
 The benchmark source and synthetic fixture definition are available under the
-[MIT License](LICENSE). The warranty decision pack carries its own
-[MIT License](packs/warranty-claim-triage-v0.1/LICENSE). Neither licence applies
-to Wald's image, binary, other decision packs, or fineSample trademarks. The
-evaluator is distributed under [Wald's evaluation terms](EVALUATION-TERMS.md).
+[MIT License](LICENSE). The [minimal starter](packs/minimal-v0.1/LICENSE) and
+[warranty decision pack](packs/warranty-claim-triage-v0.1/LICENSE) each carry
+their own MIT grant. These licences do not apply to Wald's image, binary,
+unpublished decision packs, or fineSample trademarks. The evaluator is
+distributed under [Wald's evaluation terms](EVALUATION-TERMS.md).
 
 `LICENSE` is standard legal text and intentionally has no maintenance header.
 Generated JSONL inputs and reports are untracked; the versioned generator and

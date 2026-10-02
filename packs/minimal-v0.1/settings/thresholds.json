@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "values": {
+    "pClearMin": "0.99"
+  },
+  "baseCurrency": "USD",
+  "exposureCeilings": {},
+  "riskTierField": "",
+  "rateLimitCount": 1,
+  "rateLimitWindowHours": 24,
+  "minCalibrationSamples": 500,
+  "maxCalibrationError": "0.02",
+  "minHeldOut": 200
+}
+

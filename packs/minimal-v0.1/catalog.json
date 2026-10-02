@@ -1,0 +1,42 @@
+{
+  "fields": {
+    "fields": {
+      "eventId": {
+        "path": "eventId",
+        "type": "text",
+        "nullable": false
+      },
+      "entityId": {
+        "path": "entityId",
+        "type": "text",
+        "nullable": false,
+        "sensitivity": "token"
+      },
+      "entityType": {
+        "path": "entityType",
+        "type": "text",
+        "nullable": false
+      },
+      "eventType": {
+        "path": "eventType",
+        "type": "text",
+        "nullable": false
+      },
+      "occurredAt": {
+        "path": "occurredAt",
+        "type": "timestamp",
+        "nullable": false
+      }
+    }
+  },
+  "entityTypes": ["subject"],
+  "eventTypes": ["review.opened"],
+  "projections": [],
+  "projectionRules": {},
+  "eventFeeds": {
+    "review.opened": {"maxSilence": "7d"}
+  },
+  "stateSources": {},
+  "referenceSets": []
+}
+
