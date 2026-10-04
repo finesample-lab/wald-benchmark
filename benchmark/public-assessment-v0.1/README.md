@@ -1,6 +1,6 @@
 # Wald Public Benchmark 0.1
 
-This directory owns the reproducible public benchmark for Wald's free historical evaluator. It generates synthetic alerts and independently observed outcomes, checks their hashes, and sends them through the same `wald backtest` path used for an institution's export; it never changes a live queue or replaces evaluation on an institution's own outcomes.
+This directory owns the reproducible public historical benchmark bundled with Wald. It generates synthetic alerts and independently observed outcomes, checks their hashes, and sends them through the same `wald backtest` path used for an institution's export; it never changes a live queue or replaces evaluation on an institution's own outcomes. The runtime preview also includes the Workbench and live API, but this benchmark continues to measure only historical evaluation.
 
 ## What it answers
 
@@ -25,16 +25,27 @@ The supported public path uses the released image:
 ```sh
 benchmark/public-assessment-v0.1/run.sh \
   --image ghcr.io/finesample-lab/wald:v0.1.3 \
+  --baseline 0.1.3 \
   --out /tmp/wald-assessment-0.1
 ```
 
-Maintainers can exercise an explicit local build without giving the public runner any knowledge of Wald's private source tree:
+The **0.2.0-beta.1 runtime preview** retains this same historical benchmark.
+Before its image is published, maintainers can exercise its definition from
+an explicit local build. This does not supersede the published 0.1.3 evidence:
 
 ```sh
 WALD_BIN=/absolute/path/to/wald \
   benchmark/public-assessment-v0.1/run.sh \
-  --out /tmp/wald-assessment-0.1
+  --baseline 0.2.0-beta.1 \
+  --out /tmp/wald-assessment-0.2.0-beta.1
 ```
+
+Image runs default to baseline `0.1.3`; local `WALD_BIN` runs default to `0.2.0-beta.1`.
+Use `--baseline` when testing a different pairing, including an older local
+binary. A mismatched evaluator version or full result hash fails verification;
+the runner never substitutes a matching baseline after a failure. Release runs
+select their tag's baseline explicitly. The public runner needs no knowledge of
+Wald's private source tree.
 
 The output directory must not already exist. The runner never overwrites an earlier result.
 For an image run it mounts only the generated fixture and the output directory's existing parent, creates the named result as a fresh child under the host user's UID and GID, and disables container networking.
@@ -51,7 +62,22 @@ The generator creates 1,200 chronological fraud alerts with 1,200 labels from `c
 
 The periods are separated by more than the fixture's 120-day outcome-observation lag, so the calibration period's outcomes are available before evaluation begins. The declared `asOf` is later than the final evaluation label's `observedAt`, so all 1,200 outcomes have matured for this assessment. The input also includes point-in-time customer-profile state, payment history, and synthetic feed traffic that stays inside every freshness bound read by the fraud pack. Trusted devices and monitored beneficiaries come from small, predeclared pools: membership is fixed before the timeline and is never derived from an individual outcome. Unfamiliar cases use devices absent from those pools. The pack does not read the catalog's `graphSnapshot` source, so the fixture does not invent graph state. All identifiers are synthetic tokens.
 
-`assessment.json` defines the fixture, pins the SHA-256 of each generated file, and records the expected 0.1 result. It cannot carry a comment, so this paragraph is its file guide: the generator reads it, the runner copies it beside the JSONL inputs, and the evaluator records it as input provenance. The generated JSONL files likewise contain no comments because each line must remain a valid input record; `generate.py` is their source of truth. `verify.py` independently checks the inputs, report outputs, canonical assessment statement, result hash, and headline baseline before the runner succeeds.
+The JSON definitions cannot carry comments, so this paragraph is their file
+guide: `assessment.json` owns the expected **0.2.0-beta.1 runtime preview**;
+`assessment-0.1.3.json` preserves the published 0.1.3 definition byte for byte.
+Each pins the generated input hashes, evaluator version, pack hash, full result
+hash and headline counts. The generator reads the selected definition, copies
+it beside the JSONL inputs under `assessment.json`, and the evaluator records
+those exact bytes as provenance. The fixture data itself is unchanged between
+these baselines. The generated JSONL files likewise contain no comments because
+each line must remain a valid input record; `generate.py` is their source of
+truth. `verify.py` independently checks the inputs, report outputs, canonical
+assessment statement, full result hash and headline baseline before success.
+An unchanged headline does not allow a changed report to pass an older baseline.
+The runtime preview uses the corrected versioned band identities introduced
+after 0.1.3 while retaining the same fixture counts and fitted starting points;
+its result hash is not a claim of better predictive performance. Publication,
+image signing and release attestations remain separate from local verification.
 
 ## Reading the result
 

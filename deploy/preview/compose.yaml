@@ -1,0 +1,19 @@
+# The public runtime preview starts one released Wald image, with its embedded
+# Workbench and API. wald-preview.py initializes and activates the bundled pack
+# through the normal CLI/API, then retains configuration, credentials, and data
+# in this volume. The host port is local-only; no downstream service is wired.
+services:
+  wald:
+    image: ${WALD_IMAGE:-ghcr.io/finesample-lab/wald:v0.2.0-beta.1}
+    platform: linux/amd64
+    pull_policy: missing
+    command: ["serve", "--config", "/data/finesample.json"]
+    ports:
+      - "127.0.0.1:${WALD_PREVIEW_PORT:-7070}:7070"
+    volumes:
+      - data:/data
+    restart: unless-stopped
+    stop_grace_period: 30s
+
+volumes:
+  data:

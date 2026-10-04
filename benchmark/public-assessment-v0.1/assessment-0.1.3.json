@@ -1,7 +1,7 @@
 {
   "schemaVersion": "wald-public-assessment-fixture-v1",
   "id": "wald-public-assessment",
-  "version": "0.2.0-beta.1",
+  "version": "0.1.3",
   "kind": "historicalAlertReleaseOpportunity",
   "seed": "wald-public-assessment-v0.1:104729",
   "pack": "embedded-fraud-pack",
@@ -17,7 +17,7 @@
   },
   "expected": {
     "packSha256": "sha256:dacf7916ed5fce96801e9c73cf8fcad02ae51337e2d84ed5047e0030138a09c7",
-    "resultSha256": "sha256:c596e676c251823709a890f456b07f067631e80234b669b8776b1da23b2d9e52",
+    "resultSha256": "sha256:231e1217b5a57240294c61f9d30d768b8a20dad3cc26e8a3a24ac73c0245789c",
     "evaluationAlerts": 600,
     "evaluationLabeled": 600,
     "wouldReleaseLabeled": 526,

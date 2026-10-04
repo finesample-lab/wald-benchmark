@@ -1,7 +1,7 @@
 <!--
-This is the public entry point for evaluating Wald and authoring decision packs.
-Keep the first run simple, the result's limits visible, and product previews
-distinct from the supported historical evaluator. Detailed contracts live in docs.
+This is the public entry point for Wald's runtime preview and historical evaluator.
+Keep unpublished candidates distinct from available releases and retain the
+published benchmark's limits. Detailed contracts live in docs and ops.
 -->
 
 <p align="center">
@@ -9,30 +9,31 @@ distinct from the supported historical evaluator. Detailed contracts live in doc
 </p>
 
 <p align="center">
-  <a href="tutorials/getting-started.md">Try Wald free</a> ·
+  <a href="tutorials/deployment.md">Try the runtime preview</a> ·
   <a href="tutorials/your-history.md">Assess your history</a> ·
   <a href="tutorials/warranty-pack.md">Try the warranty pack</a>
 </p>
 
-Wald helps teams get legitimate customers out of alert queues sooner. Start
-with your history: see which alerts Wald would have released, what happened
-to them later, and which still needed a person.
+Wald helps teams get legitimate customers out of alert queues sooner. Send an
+alert, review its facts in the Workbench, and keep the evidence behind the
+decision. The local runtime also serves facts to your applications and learns
+from independent outcomes.
 
-This repository gives you a free evaluator to run, public examples to inspect,
-and a separate verifier to check the result. You do not need an account or
-Wald's private source. The assessment runs locally with networking disabled
-and changes no live queue.
+**Release status:** `v0.2.0-beta.1` is a source candidate, not a published
+release. Its source-free preview kit and tutorials are prepared here. The
+published `v0.1.3` [historical evaluator](tutorials/getting-started.md) remains
+available, with public examples and a separate verifier. Wald's product source
+remains private.
 
 ## Meet the workbench
 
 ![Wald workbench showing a synthetic alert, its model answers, and supporting facts](docs/assets/workbench-queue.jpg)
 
-*Product preview: the full development runtime with synthetic data. The free
-0.1 offering supports historical assessment, not deployment of this workbench.*
+*The Workbench with synthetic data. The 0.2 preview connects it to a local API
+and durable tenant store; the published 0.1 image remains a historical evaluator.*
 
-The full product brings the case, model answers, and facts together. People
-handle unfamiliar alerts and review blind samples of decisions automation
-would otherwise hide. Wald learns from independently observed outcomes.
+Work the cases that need you, inspect how a fact was computed, and review a
+blind sample before seeing Wald's answer.
 
 <details>
 <summary>See how facts are computed</summary>
@@ -43,7 +44,30 @@ would otherwise hide. Wald learns from independently observed outcomes.
 
 </details>
 
-## Your first result
+## Your first 10 minutes
+
+Download the runtime preview kit when `v0.2.0-beta.1` is published. From the
+extracted `runtime-preview` directory, with Docker, Compose, Python 3.10 or
+later, and `linux/amd64` support:
+
+```sh
+python3 wald-preview.py up --sample
+python3 wald-preview.py credentials
+```
+
+Open the analyst sign-in link, review the sample alert, and inspect its
+evidence. `stop` then `up` retains your work. The [walkthrough](tutorials/deployment.md)
+explains setup and restart; [API integration](tutorials/developer-integration.md)
+covers events, facts, outcomes, and learning. No private source or build is needed.
+
+The preview runs one local Development tenant, with structured data and no
+external write-back. Its [evaluation grant](EVALUATION-TERMS.md) includes
+authorized customer data and an observational copy of a live feed. Local
+reviews do not release payments or change a case manager. WorkOS setup,
+the complete Merit Loop browser flow, narration, hosted operation, and
+production qualification are outside the [preview contract](ops/release-0.2.md).
+
+Prefer to start with history? These published experiments remain available:
 
 | You want to | Start here |
 | --- | --- |
@@ -99,16 +123,16 @@ public contracts when you work with an agent.
 The benchmark source, synthetic fixture definitions, example packs, and
 authoring kit are public. Wald's product source remains private.
 
-The 0.1 image supports historical assessment and, from 0.1.3, offline validation
-of complete packs. Although the binary contains server commands, API and
-workbench deployment are outside this release's supported and licensed scope.
+The 0.2 preview adds the local runtime, Workbench, durable records, pack
+installation, and existing API/CLI learning paths. The published 0.1 image
+retains its historical-only scope and original terms.
 [Read the release boundary](docs/RELEASE-BOUNDARY.md).
 
 The benchmark source is [MIT-licensed](LICENSE). The
 [minimal starter](packs/minimal-v0.1/LICENSE) and
 [warranty pack](packs/warranty-claim-triage-v0.1/LICENSE) carry their own MIT
 grants. Those licences do not apply to Wald's image, binary, unpublished packs,
-or fineSample trademarks. Use of the evaluator is governed by the
+or fineSample trademarks. Use of the 0.2 preview is governed by the
 [evaluation terms](EVALUATION-TERMS.md).
 
 [Published releases](https://github.com/finesample-lab/wald-benchmark/releases) · [Tutorials](tutorials/README.md) · [How releases are checked](docs/RELEASE-BOUNDARY.md#how-releases-are-checked)

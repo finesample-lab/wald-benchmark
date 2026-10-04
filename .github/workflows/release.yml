@@ -1,7 +1,8 @@
-# Publishes durable evidence for one already-public Wald evaluator image.
+# Publishes durable evidence for one already-public Wald image.
 # A maintainer dispatches it after the matching image is anonymously pullable;
-# it runs the tagged benchmark by digest and attaches checksummed source and
-# result archives to this repository's matching GitHub release.
+# it runs the tagged historical benchmark by digest and attaches checksummed
+# source, results, and the image's runtime-preview kit to the matching release.
+# The private image workflow owns the single runtime E2E; this does not repeat it.
 name: publish benchmark evidence
 
 on:
@@ -10,7 +11,7 @@ on:
       version:
         description: Wald release version without the leading v
         required: true
-        default: 0.1.3
+        default: 0.2.0-beta.1
         type: string
 
 permissions:
@@ -27,15 +28,15 @@ jobs:
     env:
       VERSION: ${{ inputs.version }}
     steps:
-      - name: Require a 0.1 release version
+      - name: Require a supported release version
         run: |
-          case "$VERSION" in
-            0.1.[0-9]*) ;;
-            *) echo "::error::Expected a version such as 0.1.0"; exit 1 ;;
-          esac
-          case "$VERSION" in
-            *[!0-9.]*) echo "::error::Version contains unsupported characters"; exit 1 ;;
-          esac
+          python3 - <<'PY'
+          import os
+          import re
+
+          if not re.fullmatch(r"0\.(?:1|2)\.[0-9]+(?:-beta\.[0-9]+)?", os.environ["VERSION"]):
+              raise SystemExit("Expected a version such as 0.1.3 or 0.2.0-beta.1")
+          PY
       - uses: actions/checkout@v4
         with:
           ref: v${{ inputs.version }}
@@ -93,10 +94,21 @@ jobs:
             "$candidate:/usr/share/doc/wald/public-assessment-v0.1/." \
             "$image_benchmark"
           diff -ru benchmark/public-assessment-v0.1 "$image_benchmark"
+          case "$VERSION" in
+            0.2.*)
+              docker cp "$candidate:/usr/share/doc/wald/runtime-preview" "$RUNNER_TEMP/runtime-preview"
+              diff -ru deploy/preview "$RUNNER_TEMP/runtime-preview"
+              ;;
+          esac
       - name: Run the tagged public benchmark against the exact image
         run: |
+          baseline=()
+          case "$VERSION" in
+            0.2.*) baseline=(--baseline "$VERSION") ;;
+          esac
           benchmark/public-assessment-v0.1/run.sh \
             --image "$(cat image-reference.txt)" \
+            "${baseline[@]}" \
             --out "$RUNNER_TEMP/wald-assessment-v$VERSION"
       - name: Build deterministic release archives
         run: |
@@ -113,6 +125,11 @@ jobs:
             -C "$RUNNER_TEMP" -cf - "$source_name" | gzip -n > "$artifact_dir/$source_name.tar.gz"
           tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='@0' \
             -C "$RUNNER_TEMP" -cf - "$result_name" | gzip -n > "$artifact_dir/$result_name.tar.gz"
+          if [ -d "$RUNNER_TEMP/runtime-preview" ]; then
+            tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='@0' \
+              -C "$RUNNER_TEMP" -cf - runtime-preview | gzip -n \
+              > "$artifact_dir/wald-runtime-preview-v$VERSION.tar.gz"
+          fi
           cp image-reference.txt "$artifact_dir/image-reference.txt"
           cp "$RUNNER_TEMP/wald-assessment-v$VERSION/backtest.json" "$artifact_dir/backtest.json"
           cp "$RUNNER_TEMP/wald-assessment-v$VERSION/backtest.md" "$artifact_dir/backtest.md"
@@ -134,16 +151,29 @@ jobs:
           )
           notes="$RUNNER_TEMP/release-notes.md"
           {
-            echo "This release ran Wald's public 0.1 benchmark against the exact image digest in \`image-reference.txt\`."
+            echo "This release ran Wald's public historical benchmark against the exact image digest in \`image-reference.txt\`."
+            case "$VERSION" in
+              0.2.*)
+                echo
+                echo "The runtime-preview archive was extracted from that signed image and matched to this tagged source. It includes the local Workbench and live-API startup kit; external write-back is disabled."
+                echo
+                echo "The image release exercises one runtime journey. The historical benchmark here does not establish live learning quality or production readiness."
+                ;;
+            esac
             echo
             echo "Expected result hash: \`$result_hash\`"
             echo
             echo "Verify the downloaded assets with \`sha256sum -c SHA256SUMS\`."
           } > "$notes"
+          prerelease=()
+          case "$VERSION" in
+            *-beta.*) prerelease=(--prerelease) ;;
+          esac
           if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             gh release upload "$tag" --repo "$GITHUB_REPOSITORY" --clobber "$artifact_dir"/*
-            gh release edit "$tag" --repo "$GITHUB_REPOSITORY" --title "Wald Benchmark $tag" --notes-file "$notes"
+            gh release edit "$tag" --repo "$GITHUB_REPOSITORY" --title "Wald $tag" \
+              --notes-file "$notes" "${prerelease[@]}"
           else
             gh release create "$tag" --repo "$GITHUB_REPOSITORY" --verify-tag \
-              --title "Wald Benchmark $tag" --notes-file "$notes" "$artifact_dir"/*
+              --title "Wald $tag" --notes-file "$notes" "${prerelease[@]}" "$artifact_dir"/*
           fi
