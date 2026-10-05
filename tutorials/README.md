@@ -3,19 +3,20 @@
 # Keep every linked walkthrough runnable with public artifacts, without product source.
 title: Start with a result
 audience: Evaluators, data teams, and decision-pack authors
-status: Published 0.1 evaluator tutorials and unpublished 0.2 runtime preview candidate
+status: Published 0.1 evaluator tutorials and 0.2.0-beta.1 runtime preview
 ---
 
 # Start with a result
 
 These tutorials use public image releases and the source-free kit in this
-repository. `v0.2.0-beta.1` is a candidate, not yet published; the 0.1 historical
+repository. [Wald `v0.2.0-beta.1`](https://github.com/finesample-lab/wald-benchmark/releases/tag/v0.2.0-beta.1)
+is available as a local runtime preview; the 0.1 historical
 walkthroughs remain available. You need no private source or model download.
 Each path names its prerequisites, expected output, and limits.
 
 | You want to | Start here | Allow |
 | --- | --- | --- |
-| Run a queue and keep your work after restart | [Runtime preview](deployment.md) | About 10 minutes after the candidate image is available and downloaded |
+| Run a queue and keep your work after restart | [Runtime preview](deployment.md) | About 10 minutes after setup and image download |
 | Give an application facts, decisions, and outcomes | [API integration](developer-integration.md) | About 10 minutes with the preview already running |
 | See and verify a result before bringing data | [Run your first assessment](getting-started.md) | About 10 minutes after setup and downloads |
 | Find the opportunity in your own queue | [Assess your own history](your-history.md) | About 10 minutes to run a prepared export; preparation depends on your data |

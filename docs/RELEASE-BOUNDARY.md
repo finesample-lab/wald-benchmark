@@ -5,9 +5,10 @@ and the local runtime preview. It connects tutorials to their applicable
 evaluation terms and release evidence. Exact fixture inputs and result hashes
 remain in the benchmark definitions.
 
-## Runtime preview candidate
+## Published runtime preview
 
-`v0.2.0-beta.1` is a candidate, not a published release. Its one
+[`v0.2.0-beta.1`](https://github.com/finesample-lab/wald-benchmark/releases/tag/v0.2.0-beta.1)
+is a published beta. Its one
 `linux/amd64` image and source-free kit support one local Development tenant:
 the Workbench on the live API, durable Event and Alert ingestion, reviews,
 evidence, fact computations, independent outcomes, pack installation, and
@@ -29,6 +30,13 @@ Current learning and candidate operations remain available through the API
 and CLI; this does not claim improved model quality on a customer's data.
 See the [0.2 build contract](../ops/release-0.2.md) and
 [first-session tutorial](../tutorials/deployment.md).
+
+The signed release image is
+`ghcr.io/finesample-lab/wald@sha256:5047149a9ad0c870fa0d5c63d4d68da19afc161e3f110b7b414c19a4e6d96be7`.
+The release includes `image-reference.txt`, the startup kit, historical results,
+and `SHA256SUMS`. Its [publication record](../ops/release-0.2.md#published-release)
+identifies the source commits and checks. A public beta is not production
+qualification.
 
 ## Published 0.1 evaluator
 

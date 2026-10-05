@@ -19,8 +19,8 @@ alert, review its facts in the Workbench, and keep the evidence behind the
 decision. The local runtime also serves facts to your applications and learns
 from independent outcomes.
 
-**Release status:** `v0.2.0-beta.1` is a source candidate, not a published
-release. Its source-free preview kit and tutorials are prepared here. The
+**Now available:** [Wald `v0.2.0-beta.1`](https://github.com/finesample-lab/wald-benchmark/releases/tag/v0.2.0-beta.1)
+includes the local Workbench, live API, and source-free preview kit. The
 published `v0.1.3` [historical evaluator](tutorials/getting-started.md) remains
 available, with public examples and a separate verifier. Wald's product source
 remains private.
@@ -46,7 +46,8 @@ blind sample before seeing Wald's answer.
 
 ## Your first 10 minutes
 
-Download the runtime preview kit when `v0.2.0-beta.1` is published. From the
+Download the [runtime preview kit](https://github.com/finesample-lab/wald-benchmark/releases/download/v0.2.0-beta.1/wald-runtime-preview-v0.2.0-beta.1.tar.gz).
+Check it against the release's `SHA256SUMS`. From the
 extracted `runtime-preview` directory, with Docker, Compose, Python 3.10 or
 later, and `linux/amd64` support:
 

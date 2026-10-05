@@ -8,7 +8,7 @@ time: 10 minutes after prerequisites
 prerequisites:
   - The running runtime preview and extracted kit from deployment.md
   - A POSIX shell, curl 7.76 or later, and jq
-status: v0.2.0-beta.1 candidate; not yet published
+status: Published v0.2.0-beta.1 local runtime preview
 ---
 
 # Give your application facts it can explain
@@ -33,7 +33,8 @@ fact requests. An open blind review can withhold a computation that includes
 protected narration facts, even though this tutorial sends no narration.
 The event IDs below are separate from the kit sample's reserved IDs.
 
-This tutorial targets the `v0.2.0-beta.1` candidate, which is not yet published.
+This tutorial targets the published
+[`v0.2.0-beta.1` runtime preview](https://github.com/finesample-lab/wald-benchmark/releases/tag/v0.2.0-beta.1).
 The earlier public `v0.1.3` remains a historical evaluator under its original
 release contract.
 

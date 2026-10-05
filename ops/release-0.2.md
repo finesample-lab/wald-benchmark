@@ -5,10 +5,10 @@ It defines the supported local runtime and the evidence needed to release it;
 the preview kit and tutorials implement this contract. The earlier
 [0.1 release boundary](../docs/RELEASE-BOUNDARY.md#published-01-evaluator) remains a historical record.
 
-**Status (2026-10-04): implemented and locally verified, not published.**
-The runtime image and source-free kit pass the local first-session and restart
-checks below. The public signed digest, release assets, and anonymous pull
-still belong to publication; no public `v0.2.0-beta.1` image is claimed here.
+**Status (2026-10-05): published beta.**
+The signed image, source-free startup kit, historical results, and checksums
+are available in the [public release](https://github.com/finesample-lab/wald-benchmark/releases/tag/v0.2.0-beta.1).
+The supported scope remains local evaluation, not production deployment.
 
 ## The job
 
@@ -128,7 +128,36 @@ This is a local test identity, not a published or signed registry digest.
   `sha256:c596e676c251823709a890f456b07f067631e80234b669b8776b1da23b2d9e52`.
 
 These checks establish local functional readiness, not production capacity,
-multi-day recovery, independent learning quality, or hosted readiness. Before
-publication, run normal CI once on the final tagged source, then the existing
-signed-image and public-evidence workflows. Those workflows own the public
-digest and checksummed download, not this local test record.
+multi-day recovery, independent learning quality, or hosted readiness. The
+publication checks below establish the public artifact identity; the local
+test identity above is not a release digest.
+
+## Published release
+
+The `v0.2.0-beta.1` release uses the signed image
+`ghcr.io/finesample-lab/wald@sha256:5047149a9ad0c870fa0d5c63d4d68da19afc161e3f110b7b414c19a4e6d96be7`.
+Its source identities are:
+
+- Private product commit: `910b12398e5d6356665f8ff71c9f4c5f26cb989f`.
+  Product source remains private.
+- Public benchmark and kit commit:
+  [`abd32ff1374468835275288ab8e2dce1dfa4adc4`](https://github.com/finesample-lab/wald-benchmark/commit/abd32ff1374468835275288ab8e2dce1dfa4adc4).
+  Both release tags retain these exact source identities.
+
+Normal product CI passed in run `37351287264`. The private image release
+passed in run `37353021417`, including its shipped-dependency audit,
+historical assessment, source-free runtime journey, kit packaging, signing,
+SBOM, and provenance. These runs are in the private product repository.
+
+The [public evidence workflow](https://github.com/finesample-lab/wald-benchmark/actions/runs/37357435064)
+pulled the image without registry credentials, verified its signature and
+attestations, matched the bundled benchmark and kit to the tagged public
+source, and reran the historical benchmark against that digest. It published
+the kit, source and result archives, reports, `image-reference.txt`, and
+`SHA256SUMS` on the [beta release](https://github.com/finesample-lab/wald-benchmark/releases/tag/v0.2.0-beta.1).
+The historical result hash remains
+`sha256:c596e676c251823709a890f456b07f067631e80234b669b8776b1da23b2d9e52`.
+
+This publication did not add a new CI job or test suite. It does not establish
+production capacity, shared-user admission, live learning quality, narration
+qualification, or operational write-back readiness.

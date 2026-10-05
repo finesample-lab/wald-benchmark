@@ -9,7 +9,7 @@ prerequisites:
   - Docker with Compose and linux/amd64 support
   - Python 3.10 or later, a web browser, and an unused localhost port 7070
   - The Wald runtime preview kit
-status: v0.2.0-beta.1 candidate; not yet published
+status: Published v0.2.0-beta.1 local runtime preview
 ---
 
 # Review your first alert in Wald
@@ -19,15 +19,16 @@ find the same work after a restart. The starter sample uses synthetic payments
 sent through the real API. You need no private source checkout, Rust build,
 model download, or identity-provider account.
 
-`v0.2.0-beta.1` is currently a candidate, not a published release. These are its
-runtime instructions. The published `v0.1.3` remains a historical evaluator;
+These instructions use the published
+[`v0.2.0-beta.1` beta](https://github.com/finesample-lab/wald-benchmark/releases/tag/v0.2.0-beta.1).
+The published `v0.1.3` remains a historical evaluator;
 it is not a substitute for this preview.
 
 ## Get the kit and image
 
-When the preview is published, download
+Download
 `wald-runtime-preview-v0.2.0-beta.1.tar.gz` and `SHA256SUMS` from the public
-[benchmark releases](https://github.com/finesample-lab/wald-benchmark/releases).
+[beta release](https://github.com/finesample-lab/wald-benchmark/releases/tag/v0.2.0-beta.1).
 Check the archive against its checksum, then extract it:
 
 ```sh
@@ -40,7 +41,9 @@ The same kit is distributed at `deploy/preview` in the public
 [benchmark repository](https://github.com/finesample-lab/wald-benchmark).
 Run the remaining commands from the kit directory. The image download is
 outside the ten-minute walkthrough; amd64 emulation can be slower on an Arm
-machine. For a reviewed deployment, pin the digest recorded with the release.
+machine. The release's signed image identity is
+`ghcr.io/finesample-lab/wald@sha256:5047149a9ad0c870fa0d5c63d4d68da19afc161e3f110b7b414c19a4e6d96be7`.
+Use this reference with `--image` when you need an immutable image identity.
 
 ## Start your queue
 
@@ -127,7 +130,7 @@ are outside the [preview contract](../ops/release-0.2.md).
 
 | What you see | What to check |
 | --- | --- |
-| The image or kit is unavailable | This candidate is not published yet. Use its actual release assets once available; do not substitute the historical-only 0.1 image. |
+| The image or kit is unavailable | Check access to GitHub and `ghcr.io`, then use the linked beta release assets and exact tag. Do not substitute the historical-only 0.1 image. |
 | Docker or Compose is unavailable | Start Docker and check `docker compose version`. The kit does not install a container runtime. |
 | Port 7070 is occupied | Choose another loopback port with `--port`, then use it for later kit commands and API calls. |
 | A partial store or missing credentials | Keep the existing volume. Inspect the reported failure instead of reinitializing it. |
